@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" class="dark" style="color-scheme: dark;">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In | Free Router</title>
+  <link rel="icon" href="https://freerouter.ai/favicon/glyph.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/openrouter.css">
+  <style>
+    body {
+      background-color: #090a0b;
+      color: #f4f5f7;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    html.light body {
+      background-color: #f8fafc;
+      color: #0f172a;
+    }
+
+    .login-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .login-card {
+      background: #111418;
+      border: 1px solid #1f242d;
+      border-radius: 20px;
+      padding: 40px 36px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.6);
+      text-align: center;
+      position: relative;
+    }
+    html.light .login-card {
+      background: #ffffff;
+      border-color: #e2e8f0;
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.08);
+    }
+
+    .login-oauth-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      padding: 13px 18px;
+      border-radius: 10px;
+      border: 1px solid #282d37;
+      background: #181d24;
+      color: #fff;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      margin-bottom: 14px;
+      text-decoration: none;
+      box-sizing: border-box;
+      font-family: inherit;
+    }
+    .login-oauth-btn:hover {
+      background: #232934;
+      border-color: #3b82f6;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    }
+    html.light .login-oauth-btn {
+      background: #f8fafc;
+      border-color: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .login-header-logo {
+      margin-bottom: 28px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: inherit;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Minimal Top Navigation -->
+  <header style="height: 60px; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #1f242d;">
+    <a href="/" style="display: flex; align-items: center; gap: 8px; text-decoration: none; font-size: 13px; font-weight: 600; color: #9ca3af;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+      <span>Back to Free Router</span>
+    </a>
+
+    <div style="display: flex; align-items: center; gap: 14px;">
+      <a href="/models" style="font-size: 13px; color: #9ca3af; text-decoration: none; font-weight: 600;">Models</a>
+      <a href="/pricing" style="font-size: 13px; color: #9ca3af; text-decoration: none; font-weight: 600;">Pricing</a>
+    </div>
+  </header>
+
+  <!-- Login Card Container -->
+  <div class="login-container">
+    
+    <div class="login-card">
+      <a href="/" class="login-header-logo">
+        <span style="display: inline-flex; align-items: center; gap: 8px;">
+  <svg width="26" height="20" viewBox="19.82 17.199 365.556 258.298" xmlns="http://www.w3.org/2000/svg" style="height: 20px; width: auto; color: #d4ff00;" fill="currentColor"><path d="M303.9475,17.19926c42.79734,0,77.48933,34.69327,77.48933,77.48933s-34.69199,77.48933-77.48933,77.48933l76.86166,76.86244c9.76367,9.76313,2.84903,26.45667-10.95697,26.45667h-220.88335c-71.32686,0-129.14889-57.82202-129.14889-129.14889S77.64197,17.19926,148.96884,17.19926h154.97866ZM148.96884,68.85881c-42.79607,0-77.48933,34.69327-77.48933,77.48933s34.69327,77.48933,77.48933,77.48933,77.48933-34.69327,77.48933-77.48933-34.69327-77.48933-77.48933-77.48933Z"></path></svg>
+  <span style="font-weight: 800; font-size: 18px; letter-spacing: -0.03em; color: var(--foreground, #fff); font-family: 'Plus Jakarta Sans', sans-serif;">freerouter</span>
+</span>
+      </a>
+
+      <h1 style="font-size: 22px; font-weight: 800; margin: 0 0 8px 0; letter-spacing: -0.02em;">Sign in to Free Router</h1>
+      <p style="font-size: 13px; color: #9ca3af; margin: 0 0 28px 0; line-height: 1.5;">
+        Continue with your developer account to manage API keys, track credits, and access 31 frontier models.
+      </p>
+
+      <!-- Google OAuth Button -->
+      <button class="login-oauth-btn" onclick="executeOAuth('Google')">
+        <svg width="20" height="20" viewBox="0 0 24 24" style="flex-shrink:0;">
+  <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.65v3.03h3.88c2.27-2.09 3.66-5.17 3.66-9.12z"/>
+  <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.03c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.13C3.26 21.36 7.35 24 12 24z"/>
+  <path fill="#FBBC05" d="M5.28 14.29c-.25-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29V6.57H1.25C.45 8.16 0 9.99 0 12s.45 3.84 1.25 5.43l4.03-3.14z"/>
+  <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.35 0 3.26 2.64 1.25 6.57l4.03 3.14c.95-2.83 3.6-4.96 6.72-4.96z"/>
+</svg>
+        <span>Continue with Google</span>
+      </button>
+
+      <!-- GitHub OAuth Button -->
+      <button class="login-oauth-btn" onclick="executeOAuth('GitHub')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="#ffffff" style="flex-shrink:0;">
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+</svg>
+        <span>Continue with GitHub</span>
+      </button>
+
+      <div style="font-size: 12px; color: #6b7280; margin-top: 24px; line-height: 1.5;">
+        By signing in, you agree to Free Router's 
+        <a href="/pricing" style="color: #9ca3af; text-decoration: underline;">Terms of Service</a> and 
+        <a href="/pricing" style="color: #9ca3af; text-decoration: underline;">Privacy Policy</a>.
+      </div>
+    </div>
+
+    <!-- Security & Privacy Tagline -->
+    <div style="display: flex; align-items: center; gap: 8px; margin-top: 28px; font-size: 12px; color: #6b7280;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <span>Zero Data Retention (ZDR) Enforced • Universal Token API</span>
+    </div>
+
+  </div>
+
+  <div id="orToast" class="or-toast"></div>
+
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/openrouter.js"></script>
+  <script>
+    function executeOAuth(provider) {
+      showToast('Authenticating with ' + provider + '...');
+      
+      const userObj = {
+        authenticated: true,
+        provider: provider,
+        email: provider.toLowerCase() === 'google' ? 'developer@gmail.com' : 'developer@github.com',
+        timestamp: new Date().toISOString()
+      };
+
+      localStorage.setItem('or_user_session', JSON.stringify(userObj));
+
+      setTimeout(function() {
+        showToast('✓ Successfully signed in via ' + provider + '! Redirecting...');
+        
+        const params = new URLSearchParams(window.location.search);
+        const redirectUrl = params.get('redirect_url') || '/keys';
+        
+        setTimeout(function() {
+          window.location.href = redirectUrl;
+        }, 600);
+      }, 500);
+    }
+  </script>
+</body>
+</html>

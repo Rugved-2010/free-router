@@ -1,0 +1,9 @@
+# Dependencies & environment
+node_modules/
+.env
+.env.local
+.DS_Store
+
+# Playwright MCP / test artifacts
+.playwright-mcp/
+*.log

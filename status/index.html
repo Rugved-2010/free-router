@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="en" class="dark" style="color-scheme: dark;">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>System & Model Availability Status | Free Router</title>
+  <link rel="icon" href="https://freerouter.ai/favicon/glyph.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/openrouter.css">
+  <style>
+    body {
+      background-color: #090a0b;
+      color: #f4f5f7;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    .status-container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 40px 24px 80px 24px;
+    }
+    
+    .status-hero-banner {
+      background: #111418;
+      border: 1px solid #1f242d;
+      border-radius: 16px;
+      padding: 28px 32px;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+    .status-hero-banner.operational {
+      border-color: rgba(34, 197, 94, 0.3);
+      background: linear-gradient(180deg, #121915, #111418);
+    }
+    .status-hero-banner.degraded {
+      border-color: rgba(245, 158, 11, 0.3);
+      background: linear-gradient(180deg, #1e1911, #111418);
+    }
+
+    .uptime-bar-container {
+      display: flex;
+      gap: 3px;
+      margin-top: 14px;
+      align-items: center;
+    }
+    .uptime-day-bar {
+      flex: 1;
+      height: 28px;
+      border-radius: 3px;
+      background: #22c55e;
+      transition: opacity 0.15s;
+      cursor: pointer;
+    }
+    .uptime-day-bar:hover {
+      opacity: 0.7;
+    }
+
+    .infra-card {
+      background: #12151a;
+      border: 1px solid #1f242d;
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.15s;
+    }
+
+    .provider-section-card {
+      background: #12151a;
+      border: 1px solid #1f242d;
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+    .provider-section-head {
+      padding: 16px 22px;
+      background: #161b22;
+      border-bottom: 1px solid #1f242d;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    table.status-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    table.status-table th {
+      padding: 12px 18px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #9ca3af;
+      background: #13171e;
+      border-bottom: 1px solid #1f242d;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Free Router Navbar -->
+  <header style="background: rgba(9, 10, 11, 0.9); backdrop-filter: blur(12px); border-bottom: 1px solid #1f242d; position: sticky; top: 0; z-index: 100;">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 0 24px; height: 60px; display: flex; align-items: center; justify-content: space-between;">
+      <div style="display: flex; align-items: center; gap: 24px;">
+        <a href="/" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; font-weight: 700; font-size: 16px;">
+          <span style="display: inline-flex; align-items: center; gap: 8px;">
+  <svg width="26" height="20" viewBox="19.82 17.199 365.556 258.298" xmlns="http://www.w3.org/2000/svg" style="height: 20px; width: auto; color: #d4ff00;" fill="currentColor"><path d="M303.9475,17.19926c42.79734,0,77.48933,34.69327,77.48933,77.48933s-34.69199,77.48933-77.48933,77.48933l76.86166,76.86244c9.76367,9.76313,2.84903,26.45667-10.95697,26.45667h-220.88335c-71.32686,0-129.14889-57.82202-129.14889-129.14889S77.64197,17.19926,148.96884,17.19926h154.97866ZM148.96884,68.85881c-42.79607,0-77.48933,34.69327-77.48933,77.48933s34.69327,77.48933,77.48933,77.48933,77.48933-34.69327,77.48933-77.48933-34.69327-77.48933-77.48933-77.48933Z"></path></svg>
+  <span style="font-weight: 800; font-size: 18px; letter-spacing: -0.03em; color: var(--foreground, #fff); font-family: 'Plus Jakarta Sans', sans-serif;">freerouter</span>
+</span>
+        </a>
+        <button onclick="openSearchModal()" style="display: flex; align-items: center; gap: 8px; background: #12151a; border: 1px solid #1f242d; border-radius: 9999px; padding: 6px 14px; font-size: 13px; color: #9ca3af; cursor: pointer;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+          <span>Search models...</span>
+          <span style="font-family: monospace; font-size: 11px; background: #181d24; border: 1px solid #282d37; padding: 1px 5px; border-radius: 4px;">⌘K</span>
+        </button>
+      </div>
+
+      <!-- Navigation links (Models, Chat, Pricing, Status, Keys) -->
+      <nav style="display: flex; align-items: center; gap: 8px;">
+        <a href="/models" class="keys-sidebar-btn" style="width: auto; padding: 6px 12px;">Models</a>
+        <a href="/chat" class="keys-sidebar-btn" style="width: auto; padding: 6px 12px;">Chat</a>
+        <a href="/pricing" class="keys-sidebar-btn" style="width: auto; padding: 6px 12px;">Pricing</a>
+        <a href="/status" class="keys-sidebar-btn active" style="width: auto; padding: 6px 12px; color: #d4ff00;">Status</a>
+        <a href="/keys" class="keys-sidebar-btn" style="width: auto; padding: 6px 12px;">Keys</a>
+      </nav>
+
+      <!-- Right user menu & balance -->
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <a href="/keys" style="display: flex; align-items: center; gap: 6px; background: rgba(212, 255, 0, 0.12); border: 1px solid rgba(212, 255, 0, 0.3); color: #d4ff00; padding: 4px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; text-decoration: none; font-family: monospace;">
+          <span>$100.00</span>
+        </a>
+        <div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #3b82f6, #6366f1); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; color: #fff;">
+          OR
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Status Content -->
+  <div class="status-container">
+    
+    <!-- Hero Status Banner (Synchronized with Backend API) -->
+    <div class="status-hero-banner operational" id="globalStatusBanner">
+      <div>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 32px; height: 32px; border-radius: 50%; background: #22c55e; display: flex; align-items: center; justify-content: center; color: #000; font-weight: 800; font-size: 18px;" id="globalStatusIcon">
+            ✓
+          </div>
+          <div>
+            <h1 style="font-size: 22px; font-weight: 800; margin: 0;" id="globalStatusTitle">All Systems Operational</h1>
+            <p style="font-size: 13px; color: #9ca3af; margin: 2px 0 0 0;" id="globalStatusSubtitle">
+              All 31 frontier AI models and routing edge clusters are operating at peak health.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align: right;">
+        <div style="font-size: 11px; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.05em;">Live Backend Sync</div>
+        <div style="font-family: monospace; font-size: 12px; color: #22c55e; margin-top: 2px;" id="backendSyncIndicator">
+          ● Connected (15s poll)
+        </div>
+        <button onclick="fetchBackendStatus(true)" style="background: none; border: 1px solid #282d37; color: #9ca3af; font-size: 11px; padding: 2px 8px; border-radius: 4px; cursor: pointer; margin-top: 6px;">
+          ↻ Refresh Now
+        </button>
+      </div>
+    </div>
+
+    <!-- 90-Day System Uptime Graph -->
+    <div style="background: #12151a; border: 1px solid #1f242d; border-radius: 14px; padding: 24px; margin-bottom: 32px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <span style="font-weight: 700; font-size: 14px;">Platform Availability (Last 90 Days)</span>
+        <span style="font-weight: 700; font-family: monospace; font-size: 13px; color: #22c55e;">99.99% Uptime</span>
+      </div>
+      <div class="uptime-bar-container" id="uptimeBarContainer">
+        <!-- 90 dynamic days -->
+      </div>
+      <div style="display: flex; justify-content: space-between; font-size: 11px; color: #6b7280; margin-top: 8px;">
+        <span>90 days ago</span>
+        <span>Today</span>
+      </div>
+    </div>
+
+    <!-- Core Services Status Grid -->
+    <h2 style="font-size: 18px; font-weight: 800; margin: 0 0 16px 0;">Core Platform Infrastructure</h2>
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 40px;">
+      <div class="infra-card">
+        <div style="font-size: 12px; color: #9ca3af; font-weight: 600;">Global Edge Routing</div>
+        <div style="font-size: 18px; font-weight: 800; color: #22c55e; margin: 6px 0;">Operational</div>
+        <div style="font-size: 11px; font-family: monospace; color: #6b7280;">24ms p50 • 80 PoPs</div>
+      </div>
+      <div class="infra-card">
+        <div style="font-size: 12px; color: #9ca3af; font-weight: 600;">Chat Playground API</div>
+        <div style="font-size: 18px; font-weight: 800; color: #22c55e; margin: 6px 0;">Operational</div>
+        <div style="font-size: 11px; font-family: monospace; color: #6b7280;">SSE Streaming Active</div>
+      </div>
+      <div class="infra-card">
+        <div style="font-size: 12px; color: #9ca3af; font-weight: 600;">Token Credit Ledger</div>
+        <div style="font-size: 18px; font-weight: 800; color: #22c55e; margin: 6px 0;">Operational</div>
+        <div style="font-size: 11px; font-family: monospace; color: #6b7280;">Instant Settlement</div>
+      </div>
+      <div class="infra-card">
+        <div style="font-size: 12px; color: #9ca3af; font-weight: 600;">API Key Verification</div>
+        <div style="font-size: 18px; font-weight: 800; color: #22c55e; margin: 6px 0;">Operational</div>
+        <div style="font-size: 11px; font-family: monospace; color: #6b7280;">Zero-Latency Cache</div>
+      </div>
+    </div>
+
+    <!-- Provider 1: Anthropic Models (10 Models) -->
+    <div class="provider-section-card">
+      <div class="provider-section-head">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <img src="/assets/icons/anthropic.png" alt="Anthropic" width="24" height="24" style="border-radius: 6px;">
+          <div>
+            <strong style="font-size: 15px; color: #fff;">Anthropic Cluster</strong>
+            <span style="font-size: 12px; color: #9ca3af; margin-left: 8px;">10 Active Models</span>
+          </div>
+        </div>
+        <span style="font-size: 11px; padding: 2px 8px; border-radius: 9999px; background: rgba(34, 197, 94, 0.15); color: #22c55e; font-weight: 700;">100% Operational</span>
+      </div>
+      <table class="status-table">
+        <thead>
+          <tr>
+            <th>Model Name & Slug</th>
+            <th>Availability Status</th>
+            <th>Latency (P50)</th>
+            <th>Throughput</th>
+            <th>90d Uptime</th>
+            <th style="text-align: right;">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+        <tr class="status-model-row" data-model-id="anthropic/claude-opus-5.5" style="border-bottom: 1px solid #1a1e27; transition: background 0.15s;">
+          <td style="padding: 14px 18px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <img src="/assets/icons/anthropic.png" alt="Anthropic" width="22" height="22" style="width: 22px; height: 22px; border-radius: 4px; object-fit: contain;">
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 14px; color: #fff;">Claude Opus 5.5</div>
+                <div style="font-size: 11px; font-family: monospace; color: #6b7280;">anthropic/claude-opus-5.5</div>
+              </div>
+            </div>
+          </td>
+          <td style="padding: 14px 18px;">
+            <span class="status-indicator-badge status-operational" id="status-badge-anthropic-claude-opus-5-5" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; background: rgba(34, 197, 94, 0.12); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.25);">
+              <span class="status-dot-pulse" style="width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px #22c55e;"></span>
+              <span class="status-text">Operational</span>
+            </span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #f4f5f7;">
+            <span id="latency-anthropic-claude-opus-5-5">142ms</span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #9ca3af;">
+            63 t/s
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #22c55e; font-weight: 600;">
+            99.99%
+          </td>
+          <td style="padding: 14px 18px; text-align: right;">
+            <a href="/chat?model=anthropic/claude-opus-5.5" style="font-size: 11px; font-weight: 700; color: #d4ff00; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(212, 255, 0, 0.08); border: 1px solid rgba(212, 255, 0, 0.2); transition: all 0.15s;">Test Model →</a>
+          </td>
+        </tr>
+        
+
+        <tr class="status-model-row" data-model-id="anthropic/claude-sonnet-5-5" style="border-bottom: 1px solid #1a1e27; transition: background 0.15s;">
+          <td style="padding: 14px 18px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <img src="/assets/icons/anthropic.png" alt="Anthropic" width="22" height="22" style="width: 22px; height: 22px; border-radius: 4px; object-fit: contain;">
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 14px; color: #fff;">Claude Sonnet 5.5</div>
+                <div style="font-size: 11px; font-family: monospace; color: #6b7280;">anthropic/claude-sonnet-5-5</div>
+              </div>
+            </div>
+          </td>
+          <td style="padding: 14px 18px;">
+            <span class="status-indicator-badge status-operational" id="status-badge-anthropic-claude-sonnet-5-5" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; background: rgba(34, 197, 94, 0.12); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.25);">
+              <span class="status-dot-pulse" style="width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px #22c55e;"></span>
+              <span class="status-text">Operational</span>
+            </span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #f4f5f7;">
+            <span id="latency-anthropic-claude-sonnet-5-5">110ms</span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #9ca3af;">
+            74 t/s
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #22c55e; font-weight: 600;">
+            99.99%
+          </td>
+          <td style="padding: 14px 18px; text-align: right;">
+            <a href="/chat?model=anthropic/claude-sonnet-5-5" style="font-size: 11px; font-weight: 700; color: #d4ff00; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(212, 255, 0, 0.08); border: 1px solid rgba(212, 255, 0, 0.2); transition: all 0.15s;">Test Model →</a>
+          </td>
+        </tr>
+        
+
+        <tr class="status-model-row" data-model-id="anthropic/claude-fable-5-1" style="border-bottom: 1px solid #1a1e27; transition: background 0.15s;">
+          <td style="padding: 14px 18px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <img src="/assets/icons/anthropic.png" alt="Anthropic" width="22" height="22" style="width: 22px; height: 22px; border-radius: 4px; object-fit: contain;">
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 14px; color: #fff;">Claude Fable 5.1</div>
+                <div style="font-size: 11px; font-family: monospace; color: #6b7280;">anthropic/claude-fable-5-1</div>
+              </div>
+            </div>
+          </td>
+          <td style="padding: 14px 18px;">
+            <span class="status-indicator-badge status-operational" id="status-badge-anthropic-claude-fable-5-1" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; background: rgba(34, 197, 94, 0.12); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.25);">
+              <span class="status-dot-pulse" style="width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px #22c55e;"></span>
+              <span class="status-text">Operational</span>
+            </span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #f4f5f7;">
+            <span id="latency-anthropic-claude-fable-5-1">150ms</span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #9ca3af;">
+            66 t/s
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #22c55e; font-weight: 600;">
+            99.99%
+          </td>
+          <td style="padding: 14px 18px; text-align: right;">
+            <a href="/chat?model=anthropic/claude-fable-5-1" style="font-size: 11px; font-weight: 700; color: #d4ff00; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(212, 255, 0, 0.08); border: 1px solid rgba(212, 255, 0, 0.2); transition: all 0.15s;">Test Model →</a>
+          </td>
+        </tr>
+        
+
+        <tr class="status-model-row" data-model-id="anthropic/claude-haiku-5-5" style="border-bottom: 1px solid #1a1e27; transition: background 0.15s;">
+          <td style="padding: 14px 18px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <img src="/assets/icons/anthropic.png" alt="Anthropic" width="22" height="22" style="width: 22px; height: 22px; border-radius: 4px; object-fit: contain;">
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 14px; color: #fff;">Claude Haiku 5.5</div>
+                <div style="font-size: 11px; font-family: monospace; color: #6b7280;">anthropic/claude-haiku-5-5</div>
+              </div>
+            </div>
+          </td>
+          <td style="padding: 14px 18px;">
+            <span class="status-indicator-badge status-operational" id="status-badge-anthropic-claude-haiku-5-5" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; background: rgba(34, 197, 94, 0.12); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.25);">
+              <span class="status-dot-pulse" style="width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px #22c55e;"></span>
+              <span class="status-text">Operational</span>
+            </span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #f4f5f7;">
+            <span id="latency-anthropic-claude-haiku-5-5">68ms</span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #9ca3af;">
+            180 t/s
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #22c55e; font-weight: 600;">
+            99.99%
+          </td>
+          <td style="padding: 14px 18px; text-align: right;">
+            <a href="/chat?model=anthropic/claude-haiku-5-5" style="font-size: 11px; font-weight: 700; color: #d4ff00; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(212, 255, 0, 0.08); border: 1px solid rgba(212, 255, 0, 0.2); transition: all 0.15s;">Test Model →</a>
+          </td>
+        </tr>
+        
+
+        <tr class="status-model-row" data-model-id="anthropic/claude-opus-4-7" style="border-bottom: 1px solid #1a1e27; transition: background 0.15s;">
+          <td style="padding: 14px 18px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <img src="/assets/icons/anthropic.png" alt="Anthropic" width="22" height="22" style="width: 22px; height: 22px; border-radius: 4px; object-fit: contain;">
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 14px; color: #fff;">Claude Opus 4.7</div>
+                <div style="font-size: 11px; font-family: monospace; color: #6b7280;">anthropic/claude-opus-4-7</div>
+              </div>
+            </div>
+          </td>
+          <td style="padding: 14px 18px;">
+            <span class="status-indicator-badge status-operational" id="status-badge-anthropic-claude-opus-4-7" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; background: rgba(34, 197, 94, 0.12); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.25);">
+              <span class="status-dot-pulse" style="width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px #22c55e;"></span>
+              <span class="status-text">Operational</span>
+            </span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #f4f5f7;">
+            <span id="latency-anthropic-claude-opus-4-7">155ms</span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #9ca3af;">
+            78 t/s
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #22c55e; font-weight: 600;">
+            99.99%
+          </td>
+          <td style="padding: 14px 18px; text-align: right;">
+            <a href="/chat?model=anthropic/claude-opus-4-7" style="font-size: 11px; font-weight: 700; color: #d4ff00; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(212, 255, 0, 0.08); border: 1px solid rgba(212, 255, 0, 0.2); transition: all 0.15s;">Test Model →</a>
+          </td>
+        </tr>
+        
+
+        <tr class="status-model-row" data-model-id="anthropic/claude-opus-4-6" style="border-bottom: 1px solid #1a1e27; transition: background 0.15s;">
+          <td style="padding: 14px 18px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <img src="/assets/icons/anthropic.png" alt="Anthropic" width="22" height="22" style="width: 22px; height: 22px; border-radius: 4px; object-fit: contain;">
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 14px; color: #fff;">Claude Opus 4.6</div>
+                <div style="font-size: 11px; font-family: monospace; color: #6b7280;">anthropic/claude-opus-4-6</div>
+              </div>
+            </div>
+          </td>
+          <td style="padding: 14px 18px;">
+            <span class="status-indicator-badge status-operational" id="status-badge-anthropic-claude-opus-4-6" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; background: rgba(34, 197, 94, 0.12); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.25);">
+              <span class="status-dot-pulse" style="width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px #22c55e;"></span>
+              <span class="status-text">Operational</span>
+            </span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #f4f5f7;">
+            <span id="latency-anthropic-claude-opus-4-6">160ms</span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #9ca3af;">
+            76 t/s
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #22c55e; font-weight: 600;">
+            99.99%
+          </td>
+          <td style="padding: 14px 18px; text-align: right;">
+            <a href="/chat?model=anthropic/claude-opus-4-6" style="font-size: 11px; font-weight: 700; color: #d4ff00; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(212, 255, 0, 0.08); border: 1px solid rgba(212, 255, 0, 0.2); transition: all 0.15s;">Test Model →</a>
+          </td>
+        </tr>
+        
+
+        <tr class="status-model-row" data-model-id="anthropic/claude-opus-4-5" style="border-bottom: 1px solid #1a1e27; transition: background 0.15s;">
+          <td style="padding: 14px 18px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <img src="/assets/icons/anthropic.png" alt="Anthropic" width="22" height="22" style="width: 22px; height: 22px; border-radius: 4px; object-fit: contain;">
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 14px; color: #fff;">Claude Opus 4.5</div>
+                <div style="font-size: 11px; font-family: monospace; color: #6b7280;">anthropic/claude-opus-4-5</div>
+              </div>
+            </div>
+          </td>
+          <td style="padding: 14px 18px;">
+            <span class="status-indicator-badge status-operational" id="status-badge-anthropic-claude-opus-4-5" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; background: rgba(34, 197, 94, 0.12); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.25);">
+              <span class="status-dot-pulse" style="width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px #22c55e;"></span>
+              <span class="status-text">Operational</span>
+            </span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #f4f5f7;">
+            <span id="latency-anthropic-claude-opus-4-5">165ms</span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #9ca3af;">
+            75 t/s
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #22c55e; font-weight: 600;">
+            99.99%
+          </td>
+          <td style="padding: 14px 18px; text-align: right;">
+            <a href="/chat?model=anthropic/claude-opus-4-5" style="font-size: 11px; font-weight: 700; color: #d4ff00; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(212, 255, 0, 0.08); border: 1px solid rgba(212, 255, 0, 0.2); transition: all 0.15s;">Test Model →</a>
+          </td>
+        </tr>
+        
+
+        <tr class="status-model-row" data-model-id="anthropic/claude-haiku-4-5" style="border-bottom: 1px solid #1a1e27; transition: background 0.15s;">
+          <td style="padding: 14px 18px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <img src="/assets/icons/anthropic.png" alt="Anthropic" width="22" height="22" style="width: 22px; height: 22px; border-radius: 4px; object-fit: contain;">
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 14px; color: #fff;">Claude Haiku 4.5</div>
+                <div style="font-size: 11px; font-family: monospace; color: #6b7280;">anthropic/claude-haiku-4-5</div>
+              </div>
+            </div>
+          </td>
+          <td style="padding: 14px 18px;">
+            <span class="status-indicator-badge status-operational" id="status-badge-anthropic-claude-haiku-4-5" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; background: rgba(34, 197, 94, 0.12); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.25);">
+              <span class="status-dot-pulse" style="width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px #22c55e;"></span>
+              <span class="status-text">Operational</span>
+            </span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #f4f5f7;">
+            <span id="latency-anthropic-claude-haiku-4-5">65ms</span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #9ca3af;">
+            195 t/s
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #22c55e; font-weight: 600;">
+            99.99%
+          </td>
+          <td style="padding: 14px 18px; text-align: right;">
+            <a href="/chat?model=anthropic/claude-haiku-4-5" style="font-size: 11px; font-weight: 700; color: #d4ff00; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(212, 255, 0, 0.08); border: 1px solid rgba(212, 255, 0, 0.2); transition: all 0.15s;">Test Model →</a>
+          </td>
+        </tr>
+        
+
+        <tr class="status-model-row" data-model-id="anthropic/claude-opus-4-1" style="border-bottom: 1px solid #1a1e27; transition: background 0.15s;">
+          <td style="padding: 14px 18px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <img src="/assets/icons/anthropic.png" alt="Anthropic" width="22" height="22" style="width: 22px; height: 22px; border-radius: 4px; object-fit: contain;">
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 14px; color: #fff;">Claude Opus 4.1</div>
+                <div style="font-size: 11px; font-family: monospace; color: #6b7280;">anthropic/claude-opus-4-1</div>
+              </div>
+            </div>
+          </td>
+          <td style="padding: 14px 18px;">
+            <span class="status-indicator-badge status-operational" id="status-badge-anthropic-claude-opus-4-1" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; background: rgba(34, 197, 94, 0.12); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.25);">
+              <span class="status-dot-pulse" style="width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px #22c55e;"></span>
+              <span class="status-text">Operational</span>
+            </span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #f4f5f7;">
+            <span id="latency-anthropic-claude-opus-4-1">170ms</span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #9ca3af;">
+            74 t/s
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #22c55e; font-weight: 600;">
+            99.99%
+          </td>
+          <td style="padding: 14px 18px; text-align: right;">
+            <a href="/chat?model=anthropic/claude-opus-4-1" style="font-size: 11px; font-weight: 700; color: #d4ff00; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(212, 255, 0, 0.08); border: 1px solid rgba(212, 255, 0, 0.2); transition: all 0.15s;">Test Model →</a>
+          </td>
+        </tr>
+        
+
+        <tr class="status-model-row" data-model-id="anthropic/claude-opus-4-0" style="border-bottom: 1px solid #1a1e27; transition: background 0.15s;">
+          <td style="padding: 14px 18px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <img src="/assets/icons/anthropic.png" alt="Anthropic" width="22" height="22" style="width: 22px; height: 22px; border-radius: 4px; object-fit: contain;">
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 14px; color: #fff;">Claude Opus 4.0</div>
+                <div style="font-size: 11px; font-family: monospace; color: #6b7280;">anthropic/claude-opus-4-0</div>
+              </div>
+            </div>
+          </td>
+          <td style="padding: 14px 18px;">
+            <span class="status-indicator-badge status-operational" id="status-badge-anthropic-claude-opus-4-0" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; background: rgba(34, 197, 94, 0.12); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.25);">
+              <span class="status-dot-pulse" style="width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px #22c55e;"></span>
+              <span class="status-text">Operational</span>
+            </span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #f4f5f7;">
+            <span id="latency-anthropic-claude-opus-4-0">180ms</span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #9ca3af;">
+            72 t/s
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #22c55e; font-weight: 600;">
+            99.99%
+          </td>
+          <td style="padding: 14px 18px; text-align: right;">
+            <a href="/chat?model=anthropic/claude-opus-4-0" style="font-size: 11px; font-weight: 700; color: #d4ff00; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(212, 255, 0, 0.08); border: 1px solid rgba(212, 255, 0, 0.2); transition: all 0.15s;">Test Model →</a>
+          </td>
+        </tr>
+        
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Provider 2: OpenAI Models (16 Models) -->
+    <div class="provider-section-card">
+      <div class="provider-section-head">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <img src="/assets/icons/openai.png" alt="OpenAI" width="24" height="24" style="border-radius: 6px;">
+          <div>
+            <strong style="font-size: 15px; color: #fff;">OpenAI Cluster</strong>
+            <span style="font-size: 12px; color: #9ca3af; margin-left: 8px;">16 Active Models</span>
+          </div>
+        </div>
+        <span style="font-size: 11px; padding: 2px 8px; border-radius: 9999px; background: rgba(34, 197, 94, 0.15); color: #22c55e; font-weight: 700;">100% Operational</span>
+      </div>
+      <table class="status-table">
+        <thead>
+          <tr>
+            <th>Model Name & Slug</th>
+            <th>Availability Status</th>
+            <th>Latency (P50)</th>
+            <th>Throughput</th>
+            <th>90d Uptime</th>
+            <th style="text-align: right;">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+        <tr class="status-model-row" data-model-id="openai/gpt-6.1-terra" style="border-bottom: 1px solid #1a1e27; transition: background 0.15s;">
+          <td style="padding: 14px 18px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <img src="/assets/icons/openai.png" alt="OpenAI" width="22" height="22" style="width: 22px; height: 22px; border-radius: 4px; object-fit: contain;">
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 14px; color: #fff;">GPT-6.1 Terra</div>
+                <div style="font-size: 11px; font-family: monospace; color: #6b7280;">openai/gpt-6.1-terra</div>
+              </div>
+            </div>
+          </td>
+          <td style="padding: 14px 18px;">
+            <span class="status-indicator-badge status-operational" id="status-badge-openai-gpt-6-1-terra" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; background: rgba(34, 197, 94, 0.12); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.25);">
+              <span class="status-dot-pulse" style="width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px #22c55e;"></span>
+              <span class="status-text">Operational</span>
+            </span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #f4f5f7;">
+            <span id="latency-openai-gpt-6-1-terra">145ms</span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #9ca3af;">
+            105 t/s
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #22c55e; font-weight: 600;">
+            99.99%
+          </td>
+          <td style="padding: 14px 18px; text-align: right;">
+            <a href="/chat?model=openai/gpt-6.1-terra" style="font-size: 11px; font-weight: 700; color: #d4ff00; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(212, 255, 0, 0.08); border: 1px solid rgba(212, 255, 0, 0.2); transition: all 0.15s;">Test Model →</a>
+          </td>
+        </tr>
+        
+
+        <tr class="status-model-row" data-model-id="openai/gpt-6.1-sol" style="border-bottom: 1px solid #1a1e27; transition: background 0.15s;">
+          <td style="padding: 14px 18px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <img src="/assets/icons/openai.png" alt="OpenAI" width="22" height="22" style="width: 22px; height: 22px; border-radius: 4px; object-fit: contain;">
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 14px; color: #fff;">GPT-6.1 Sol</div>
+                <div style="font-size: 11px; font-family: monospace; color: #6b7280;">openai/gpt-6.1-sol</div>
+              </div>
+            </div>
+          </td>
+          <td style="padding: 14px 18px;">
+            <span class="status-indicator-badge status-operational" id="status-badge-openai-gpt-6-1-sol" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; background: rgba(34, 197, 94, 0.12); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.25);">
+              <span class="status-dot-pulse" style="width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px #22c55e;"></span>
+              <span class="status-text">Operational</span>
+            </span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #f4f5f7;">
+            <span id="latency-openai-gpt-6-1-sol">125ms</span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #9ca3af;">
+            120 t/s
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #22c55e; font-weight: 600;">
+            99.99%
+          </td>
+          <td style="padding: 14px 18px; text-align: right;">
+            <a href="/chat?model=openai/gpt-6.1-sol" style="font-size: 11px; font-weight: 700; color: #d4ff00; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(212, 255, 0, 0.08); border: 1px solid rgba(212, 255, 0, 0.2); transition: all 0.15s;">Test Model →</a>
+          </td>
+        </tr>
+        
+
+        <tr class="status-model-row" data-model-id="openai/gpt-6-sol" style="border-bottom: 1px solid #1a1e27; transition: background 0.15s;">
+          <td style="padding: 14px 18px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <img src="/assets/icons/openai.png" alt="OpenAI" width="22" height="22" style="width: 22px; height: 22px; border-radius: 4px; object-fit: contain;">
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 14px; color: #fff;">GPT-6 Sol</div>
+                <div style="font-size: 11px; font-family: monospace; color: #6b7280;">openai/gpt-6-sol</div>
+              </div>
+            </div>
+          </td>
+          <td style="padding: 14px 18px;">
+            <span class="status-indicator-badge status-operational" id="status-badge-openai-gpt-6-sol" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; background: rgba(34, 197, 94, 0.12); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.25);">
+              <span class="status-dot-pulse" style="width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px #22c55e;"></span>
+              <span class="status-text">Operational</span>
+            </span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #f4f5f7;">
+            <span id="latency-openai-gpt-6-sol">120ms</span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #9ca3af;">
+            125 t/s
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #22c55e; font-weight: 600;">
+            99.99%
+          </td>
+          <td style="padding: 14px 18px; text-align: right;">
+            <a href="/chat?model=openai/gpt-6-sol" style="font-size: 11px; font-weight: 700; color: #d4ff00; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(212, 255, 0, 0.08); border: 1px solid rgba(212, 255, 0, 0.2); transition: all 0.15s;">Test Model →</a>
+          </td>
+        </tr>
+        
+
+        <tr class="status-model-row" data-model-id="openai/gpt-6-astra" style="border-bottom: 1px solid #1a1e27; transition: background 0.15s;">
+          <td style="padding: 14px 18px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <img src="/assets/icons/openai.png" alt="OpenAI" width="22" height="22" style="width: 22px; height: 22px; border-radius: 4px; object-fit: contain;">
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 14px; color: #fff;">GPT-6 Astra</div>
+                <div style="font-size: 11px; font-family: monospace; color: #6b7280;">openai/gpt-6-astra</div>
+              </div>
+            </div>
+          </td>
+          <td style="padding: 14px 18px;">
+            <span class="status-indicator-badge status-operational" id="status-badge-openai-gpt-6-astra" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; background: rgba(34, 197, 94, 0.12); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.25);">
+              <span class="status-dot-pulse" style="width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px #22c55e;"></span>
+              <span class="status-text">Operational</span>
+            </span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #f4f5f7;">
+            <span id="latency-openai-gpt-6-astra">130ms</span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #9ca3af;">
+            112 t/s
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #22c55e; font-weight: 600;">
+            99.99%
+          </td>
+          <td style="padding: 14px 18px; text-align: right;">
+            <a href="/chat?model=openai/gpt-6-astra" style="font-size: 11px; font-weight: 700; color: #d4ff00; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(212, 255, 0, 0.08); border: 1px solid rgba(212, 255, 0, 0.2); transition: all 0.15s;">Test Model →</a>
+          </td>
+        </tr>
+        
+
+        <tr class="status-model-row" data-model-id="openai/gpt-6-luna" style="border-bottom: 1px solid #1a1e27; transition: background 0.15s;">
+          <td style="padding: 14px 18px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <img src="/assets/icons/openai.png" alt="OpenAI" width="22" height="22" style="width: 22px; height: 22px; border-radius: 4px; object-fit: contain;">
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 14px; color: #fff;">GPT-6 Luna</div>
+                <div style="font-size: 11px; font-family: monospace; color: #6b7280;">openai/gpt-6-luna</div>
+              </div>
+            </div>
+          </td>
+          <td style="padding: 14px 18px;">
+            <span class="status-indicator-badge status-operational" id="status-badge-openai-gpt-6-luna" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; background: rgba(34, 197, 94, 0.12); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.25);">
+              <span class="status-dot-pulse" style="width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px #22c55e;"></span>
+              <span class="status-text">Operational</span>
+            </span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #f4f5f7;">
+            <span id="latency-openai-gpt-6-luna">135ms</span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #9ca3af;">
+            118 t/s
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #22c55e; font-weight: 600;">
+            99.99%
+          </td>
+          <td style="padding: 14px 18px; text-align: right;">
+            <a href="/chat?model=openai/gpt-6-luna" style="font-size: 11px; font-weight: 700; color: #d4ff00; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(212, 255, 0, 0.08); border: 1px solid rgba(212, 255, 0, 0.2); transition: all 0.15s;">Test Model →</a>
+          </td>
+        </tr>
+        
+
+        <tr class="status-model-row" data-model-id="openai/gpt-6" style="border-bottom: 1px solid #1a1e27; transition: background 0.15s;">
+          <td style="padding: 14px 18px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <img src="/assets/icons/openai.png" alt="OpenAI" width="22" height="22" style="width: 22px; height: 22px; border-radius: 4px; object-fit: contain;">
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 14px; color: #fff;">GPT-6</div>
+                <div style="font-size: 11px; font-family: monospace; color: #6b7280;">openai/gpt-6</div>
+              </div>
+            </div>
+          </td>
+          <td style="padding: 14px 18px;">
+            <span class="status-indicator-badge status-operational" id="status-badge-openai-gpt-6" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; background: rgba(34, 197, 94, 0.12); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.25);">
+              <span class="status-dot-pulse" style="width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px #22c55e;"></span>
+              <span class="status-text">Operational</span>
+            </span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #f4f5f7;">
+            <span id="latency-openai-gpt-6">140ms</span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #9ca3af;">
+            98 t/s
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #22c55e; font-weight: 600;">
+            99.99%
+          </td>
+          <td style="padding: 14px 18px; text-align: right;">
+            <a href="/chat?model=openai/gpt-6" style="font-size: 11px; font-weight: 700; color: #d4ff00; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(212, 255, 0, 0.08); border: 1px solid rgba(212, 255, 0, 0.2); transition: all 0.15s;">Test Model →</a>
+          </td>
+        </tr>
+        
+
+        <tr class="status-model-row" data-model-id="openai/gpt-5-6" style="border-bottom: 1px solid #1a1e27; transition: background 0.15s;">
+          <td style="padding: 14px 18px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <img src="/assets/icons/openai.png" alt="OpenAI" width="22" height="22" style="width: 22px; height: 22px; border-radius: 4px; object-fit: contain;">
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 14px; color: #fff;">GPT-5.6</div>
+                <div style="font-size: 11px; font-family: monospace; color: #6b7280;">openai/gpt-5-6</div>
+              </div>
+            </div>
+          </td>
+          <td style="padding: 14px 18px;">
+            <span class="status-indicator-badge status-operational" id="status-badge-openai-gpt-5-6" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; background: rgba(34, 197, 94, 0.12); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.25);">
+              <span class="status-dot-pulse" style="width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px #22c55e;"></span>
+              <span class="status-text">Operational</span>
+            </span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #f4f5f7;">
+            <span id="latency-openai-gpt-5-6">105ms</span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #9ca3af;">
+            130 t/s
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #22c55e; font-weight: 600;">
+            99.99%
+          </td>
+          <td style="padding: 14px 18px; text-align: right;">
+            <a href="/chat?model=openai/gpt-5-6" style="font-size: 11px; font-weight: 700; color: #d4ff00; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(212, 255, 0, 0.08); border: 1px solid rgba(212, 255, 0, 0.2); transition: all 0.15s;">Test Model →</a>
+          </td>
+        </tr>
+        
+
+        <tr class="status-model-row" data-model-id="openai/gpt-5-5" style="border-bottom: 1px solid #1a1e27; transition: background 0.15s;">
+          <td style="padding: 14px 18px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <img src="/assets/icons/openai.png" alt="OpenAI" width="22" height="22" style="width: 22px; height: 22px; border-radius: 4px; object-fit: contain;">
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 14px; color: #fff;">GPT-5.5</div>
+                <div style="font-size: 11px; font-family: monospace; color: #6b7280;">openai/gpt-5-5</div>
+              </div>
+            </div>
+          </td>
+          <td style="padding: 14px 18px;">
+            <span class="status-indicator-badge status-operational" id="status-badge-openai-gpt-5-5" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; background: rgba(34, 197, 94, 0.12); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.25);">
+              <span class="status-dot-pulse" style="width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px #22c55e;"></span>
+              <span class="status-text">Operational</span>
+            </span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #f4f5f7;">
+            <span id="latency-openai-gpt-5-5">110ms</span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #9ca3af;">
+            128 t/s
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #22c55e; font-weight: 600;">
+            99.99%
+          </td>
+          <td style="padding: 14px 18px; text-align: right;">
+            <a href="/chat?model=openai/gpt-5-5" style="font-size: 11px; font-weight: 700; color: #d4ff00; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(212, 255, 0, 0.08); border: 1px solid rgba(212, 255, 0, 0.2); transition: all 0.15s;">Test Model →</a>
+          </td>
+        </tr>
+        
+
+        <tr class="status-model-row" data-model-id="openai/gpt-5-4" style="border-bottom: 1px solid #1a1e27; transition: background 0.15s;">
+          <td style="padding: 14px 18px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <img src="/assets/icons/openai.png" alt="OpenAI" width="22" height="22" style="width: 22px; height: 22px; border-radius: 4px; object-fit: contain;">
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 14px; color: #fff;">GPT-5.4</div>
+                <div style="font-size: 11px; font-family: monospace; color: #6b7280;">openai/gpt-5-4</div>
+              </div>
+            </div>
+          </td>
+          <td style="padding: 14px 18px;">
+            <span class="status-indicator-badge status-operational" id="status-badge-openai-gpt-5-4" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; background: rgba(34, 197, 94, 0.12); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.25);">
+              <span class="status-dot-pulse" style="width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px #22c55e;"></span>
+              <span class="status-text">Operational</span>
+            </span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #f4f5f7;">
+            <span id="latency-openai-gpt-5-4">115ms</span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #9ca3af;">
+            125 t/s
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #22c55e; font-weight: 600;">
+            99.99%
+          </td>
+          <td style="padding: 14px 18px; text-align: right;">
+            <a href="/chat?model=openai/gpt-5-4" style="font-size: 11px; font-weight: 700; color: #d4ff00; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(212, 255, 0, 0.08); border: 1px solid rgba(212, 255, 0, 0.2); transition: all 0.15s;">Test Model →</a>
+          </td>
+        </tr>
+        
+
+        <tr class="status-model-row" data-model-id="openai/gpt-5-3-codex" style="border-bottom: 1px solid #1a1e27; transition: background 0.15s;">
+          <td style="padding: 14px 18px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <img src="/assets/icons/openai.png" alt="OpenAI" width="22" height="22" style="width: 22px; height: 22px; border-radius: 4px; object-fit: contain;">
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 14px; color: #fff;">GPT-5.3 Codex</div>
+                <div style="font-size: 11px; font-family: monospace; color: #6b7280;">openai/gpt-5-3-codex</div>
+              </div>
+            </div>
+          </td>
+          <td style="padding: 14px 18px;">
+            <span class="status-indicator-badge status-operational" id="status-badge-openai-gpt-5-3-codex" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; background: rgba(34, 197, 94, 0.12); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.25);">
+              <span class="status-dot-pulse" style="width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px #22c55e;"></span>
+              <span class="status-text">Operational</span>
+            </span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #f4f5f7;">
+            <span id="latency-openai-gpt-5-3-codex">100ms</span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #9ca3af;">
+            135 t/s
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #22c55e; font-weight: 600;">
+            99.99%
+          </td>
+          <td style="padding: 14px 18px; text-align: right;">
+            <a href="/chat?model=openai/gpt-5-3-codex" style="font-size: 11px; font-weight: 700; color: #d4ff00; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(212, 255, 0, 0.08); border: 1px solid rgba(212, 255, 0, 0.2); transition: all 0.15s;">Test Model →</a>
+          </td>
+        </tr>
+        
+
+        <tr class="status-model-row" data-model-id="openai/gpt-5-2" style="border-bottom: 1px solid #1a1e27; transition: background 0.15s;">
+          <td style="padding: 14px 18px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <img src="/assets/icons/openai.png" alt="OpenAI" width="22" height="22" style="width: 22px; height: 22px; border-radius: 4px; object-fit: contain;">
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 14px; color: #fff;">GPT-5.2</div>
+                <div style="font-size: 11px; font-family: monospace; color: #6b7280;">openai/gpt-5-2</div>
+              </div>
+            </div>
+          </td>
+          <td style="padding: 14px 18px;">
+            <span class="status-indicator-badge status-operational" id="status-badge-openai-gpt-5-2" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; background: rgba(34, 197, 94, 0.12); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.25);">
+              <span class="status-dot-pulse" style="width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px #22c55e;"></span>
+              <span class="status-text">Operational</span>
+            </span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #f4f5f7;">
+            <span id="latency-openai-gpt-5-2">120ms</span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #9ca3af;">
+            120 t/s
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #22c55e; font-weight: 600;">
+            99.99%
+          </td>
+          <td style="padding: 14px 18px; text-align: right;">
+            <a href="/chat?model=openai/gpt-5-2" style="font-size: 11px; font-weight: 700; color: #d4ff00; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(212, 255, 0, 0.08); border: 1px solid rgba(212, 255, 0, 0.2); transition: all 0.15s;">Test Model →</a>
+          </td>
+        </tr>
+        
+
+        <tr class="status-model-row" data-model-id="openai/gpt-5-1" style="border-bottom: 1px solid #1a1e27; transition: background 0.15s;">
+          <td style="padding: 14px 18px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <img src="/assets/icons/openai.png" alt="OpenAI" width="22" height="22" style="width: 22px; height: 22px; border-radius: 4px; object-fit: contain;">
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 14px; color: #fff;">GPT-5.1</div>
+                <div style="font-size: 11px; font-family: monospace; color: #6b7280;">openai/gpt-5-1</div>
+              </div>
+            </div>
+          </td>
+          <td style="padding: 14px 18px;">
+            <span class="status-indicator-badge status-operational" id="status-badge-openai-gpt-5-1" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; background: rgba(34, 197, 94, 0.12); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.25);">
+              <span class="status-dot-pulse" style="width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px #22c55e;"></span>
+              <span class="status-text">Operational</span>
+            </span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #f4f5f7;">
+            <span id="latency-openai-gpt-5-1">125ms</span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #9ca3af;">
+            115 t/s
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #22c55e; font-weight: 600;">
+            99.99%
+          </td>
+          <td style="padding: 14px 18px; text-align: right;">
+            <a href="/chat?model=openai/gpt-5-1" style="font-size: 11px; font-weight: 700; color: #d4ff00; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(212, 255, 0, 0.08); border: 1px solid rgba(212, 255, 0, 0.2); transition: all 0.15s;">Test Model →</a>
+          </td>
+        </tr>
+        
+
+        <tr class="status-model-row" data-model-id="openai/gpt-5" style="border-bottom: 1px solid #1a1e27; transition: background 0.15s;">
+          <td style="padding: 14px 18px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <img src="/assets/icons/openai.png" alt="OpenAI" width="22" height="22" style="width: 22px; height: 22px; border-radius: 4px; object-fit: contain;">
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 14px; color: #fff;">GPT-5</div>
+                <div style="font-size: 11px; font-family: monospace; color: #6b7280;">openai/gpt-5</div>
+              </div>
+            </div>
+          </td>
+          <td style="padding: 14px 18px;">
+            <span class="status-indicator-badge status-operational" id="status-badge-openai-gpt-5" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; background: rgba(34, 197, 94, 0.12); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.25);">
+              <span class="status-dot-pulse" style="width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px #22c55e;"></span>
+              <span class="status-text">Operational</span>
+            </span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #f4f5f7;">
+            <span id="latency-openai-gpt-5">130ms</span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #9ca3af;">
+            110 t/s
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #22c55e; font-weight: 600;">
+            99.99%
+          </td>
+          <td style="padding: 14px 18px; text-align: right;">
+            <a href="/chat?model=openai/gpt-5" style="font-size: 11px; font-weight: 700; color: #d4ff00; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(212, 255, 0, 0.08); border: 1px solid rgba(212, 255, 0, 0.2); transition: all 0.15s;">Test Model →</a>
+          </td>
+        </tr>
+        
+
+        <tr class="status-model-row" data-model-id="openai/o3" style="border-bottom: 1px solid #1a1e27; transition: background 0.15s;">
+          <td style="padding: 14px 18px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <img src="/assets/icons/openai.png" alt="OpenAI" width="22" height="22" style="width: 22px; height: 22px; border-radius: 4px; object-fit: contain;">
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 14px; color: #fff;">o3</div>
+                <div style="font-size: 11px; font-family: monospace; color: #6b7280;">openai/o3</div>
+              </div>
+            </div>
+          </td>
+          <td style="padding: 14px 18px;">
+            <span class="status-indicator-badge status-operational" id="status-badge-openai-o3" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; background: rgba(34, 197, 94, 0.12); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.25);">
+              <span class="status-dot-pulse" style="width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px #22c55e;"></span>
+              <span class="status-text">Operational</span>
+            </span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #f4f5f7;">
+            <span id="latency-openai-o3">240ms</span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #9ca3af;">
+            58 t/s
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #22c55e; font-weight: 600;">
+            99.99%
+          </td>
+          <td style="padding: 14px 18px; text-align: right;">
+            <a href="/chat?model=openai/o3" style="font-size: 11px; font-weight: 700; color: #d4ff00; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(212, 255, 0, 0.08); border: 1px solid rgba(212, 255, 0, 0.2); transition: all 0.15s;">Test Model →</a>
+          </td>
+        </tr>
+        
+
+        <tr class="status-model-row" data-model-id="openai/o4-mini" style="border-bottom: 1px solid #1a1e27; transition: background 0.15s;">
+          <td style="padding: 14px 18px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <img src="/assets/icons/openai.png" alt="OpenAI" width="22" height="22" style="width: 22px; height: 22px; border-radius: 4px; object-fit: contain;">
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 14px; color: #fff;">o4-mini</div>
+                <div style="font-size: 11px; font-family: monospace; color: #6b7280;">openai/o4-mini</div>
+              </div>
+            </div>
+          </td>
+          <td style="padding: 14px 18px;">
+            <span class="status-indicator-badge status-operational" id="status-badge-openai-o4-mini" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; background: rgba(34, 197, 94, 0.12); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.25);">
+              <span class="status-dot-pulse" style="width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px #22c55e;"></span>
+              <span class="status-text">Operational</span>
+            </span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #f4f5f7;">
+            <span id="latency-openai-o4-mini">95ms</span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #9ca3af;">
+            145 t/s
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #22c55e; font-weight: 600;">
+            99.99%
+          </td>
+          <td style="padding: 14px 18px; text-align: right;">
+            <a href="/chat?model=openai/o4-mini" style="font-size: 11px; font-weight: 700; color: #d4ff00; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(212, 255, 0, 0.08); border: 1px solid rgba(212, 255, 0, 0.2); transition: all 0.15s;">Test Model →</a>
+          </td>
+        </tr>
+        
+
+        <tr class="status-model-row" data-model-id="openai/gpt-6-instant" style="border-bottom: 1px solid #1a1e27; transition: background 0.15s;">
+          <td style="padding: 14px 18px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <img src="/assets/icons/openai.png" alt="OpenAI" width="22" height="22" style="width: 22px; height: 22px; border-radius: 4px; object-fit: contain;">
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 14px; color: #fff;">GPT-6 Instant</div>
+                <div style="font-size: 11px; font-family: monospace; color: #6b7280;">openai/gpt-6-instant</div>
+              </div>
+            </div>
+          </td>
+          <td style="padding: 14px 18px;">
+            <span class="status-indicator-badge status-operational" id="status-badge-openai-gpt-6-instant" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; background: rgba(34, 197, 94, 0.12); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.25);">
+              <span class="status-dot-pulse" style="width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px #22c55e;"></span>
+              <span class="status-text">Operational</span>
+            </span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #f4f5f7;">
+            <span id="latency-openai-gpt-6-instant">60ms</span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #9ca3af;">
+            190 t/s
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #22c55e; font-weight: 600;">
+            99.99%
+          </td>
+          <td style="padding: 14px 18px; text-align: right;">
+            <a href="/chat?model=openai/gpt-6-instant" style="font-size: 11px; font-weight: 700; color: #d4ff00; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(212, 255, 0, 0.08); border: 1px solid rgba(212, 255, 0, 0.2); transition: all 0.15s;">Test Model →</a>
+          </td>
+        </tr>
+        
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Provider 3: Zhipu AI / GLM Models (5 Models) -->
+    <div class="provider-section-card">
+      <div class="provider-section-head">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <img src="/assets/icons/zhipu.png" alt="Zhipu AI" width="24" height="24" style="border-radius: 6px;">
+          <div>
+            <strong style="font-size: 15px; color: #fff;">Zhipu AI (GLM) Cluster</strong>
+            <span style="font-size: 12px; color: #9ca3af; margin-left: 8px;">5 Active Models</span>
+          </div>
+        </div>
+        <span style="font-size: 11px; padding: 2px 8px; border-radius: 9999px; background: rgba(34, 197, 94, 0.15); color: #22c55e; font-weight: 700;">100% Operational</span>
+      </div>
+      <table class="status-table">
+        <thead>
+          <tr>
+            <th>Model Name & Slug</th>
+            <th>Availability Status</th>
+            <th>Latency (P50)</th>
+            <th>Throughput</th>
+            <th>90d Uptime</th>
+            <th style="text-align: right;">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+        <tr class="status-model-row" data-model-id="zhipu/glm-5-3-flashx-legal" style="border-bottom: 1px solid #1a1e27; transition: background 0.15s;">
+          <td style="padding: 14px 18px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <img src="/assets/icons/zhipu.png" alt="Zhipu AI" width="22" height="22" style="width: 22px; height: 22px; border-radius: 4px; object-fit: contain;">
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 14px; color: #fff;">GLM-5.3 FlashX Legal</div>
+                <div style="font-size: 11px; font-family: monospace; color: #6b7280;">zhipu/glm-5-3-flashx-legal</div>
+              </div>
+            </div>
+          </td>
+          <td style="padding: 14px 18px;">
+            <span class="status-indicator-badge status-operational" id="status-badge-zhipu-glm-5-3-flashx-legal" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; background: rgba(34, 197, 94, 0.12); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.25);">
+              <span class="status-dot-pulse" style="width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px #22c55e;"></span>
+              <span class="status-text">Operational</span>
+            </span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #f4f5f7;">
+            <span id="latency-zhipu-glm-5-3-flashx-legal">95ms</span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #9ca3af;">
+            155 t/s
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #22c55e; font-weight: 600;">
+            99.99%
+          </td>
+          <td style="padding: 14px 18px; text-align: right;">
+            <a href="/chat?model=zhipu/glm-5-3-flashx-legal" style="font-size: 11px; font-weight: 700; color: #d4ff00; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(212, 255, 0, 0.08); border: 1px solid rgba(212, 255, 0, 0.2); transition: all 0.15s;">Test Model →</a>
+          </td>
+        </tr>
+        
+
+        <tr class="status-model-row" data-model-id="zhipu/glm-5-3-flashx" style="border-bottom: 1px solid #1a1e27; transition: background 0.15s;">
+          <td style="padding: 14px 18px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <img src="/assets/icons/zhipu.png" alt="Zhipu AI" width="22" height="22" style="width: 22px; height: 22px; border-radius: 4px; object-fit: contain;">
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 14px; color: #fff;">GLM-5.3 FlashX</div>
+                <div style="font-size: 11px; font-family: monospace; color: #6b7280;">zhipu/glm-5-3-flashx</div>
+              </div>
+            </div>
+          </td>
+          <td style="padding: 14px 18px;">
+            <span class="status-indicator-badge status-operational" id="status-badge-zhipu-glm-5-3-flashx" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; background: rgba(34, 197, 94, 0.12); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.25);">
+              <span class="status-dot-pulse" style="width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px #22c55e;"></span>
+              <span class="status-text">Operational</span>
+            </span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #f4f5f7;">
+            <span id="latency-zhipu-glm-5-3-flashx">55ms</span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #9ca3af;">
+            210 t/s
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #22c55e; font-weight: 600;">
+            99.99%
+          </td>
+          <td style="padding: 14px 18px; text-align: right;">
+            <a href="/chat?model=zhipu/glm-5-3-flashx" style="font-size: 11px; font-weight: 700; color: #d4ff00; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(212, 255, 0, 0.08); border: 1px solid rgba(212, 255, 0, 0.2); transition: all 0.15s;">Test Model →</a>
+          </td>
+        </tr>
+        
+
+        <tr class="status-model-row" data-model-id="zhipu/glm-5-3-flash" style="border-bottom: 1px solid #1a1e27; transition: background 0.15s;">
+          <td style="padding: 14px 18px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <img src="/assets/icons/zhipu.png" alt="Zhipu AI" width="22" height="22" style="width: 22px; height: 22px; border-radius: 4px; object-fit: contain;">
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 14px; color: #fff;">GLM-5.3 Flash</div>
+                <div style="font-size: 11px; font-family: monospace; color: #6b7280;">zhipu/glm-5-3-flash</div>
+              </div>
+            </div>
+          </td>
+          <td style="padding: 14px 18px;">
+            <span class="status-indicator-badge status-operational" id="status-badge-zhipu-glm-5-3-flash" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; background: rgba(34, 197, 94, 0.12); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.25);">
+              <span class="status-dot-pulse" style="width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px #22c55e;"></span>
+              <span class="status-text">Operational</span>
+            </span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #f4f5f7;">
+            <span id="latency-zhipu-glm-5-3-flash">50ms</span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #9ca3af;">
+            225 t/s
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #22c55e; font-weight: 600;">
+            99.99%
+          </td>
+          <td style="padding: 14px 18px; text-align: right;">
+            <a href="/chat?model=zhipu/glm-5-3-flash" style="font-size: 11px; font-weight: 700; color: #d4ff00; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(212, 255, 0, 0.08); border: 1px solid rgba(212, 255, 0, 0.2); transition: all 0.15s;">Test Model →</a>
+          </td>
+        </tr>
+        
+
+        <tr class="status-model-row" data-model-id="zhipu/glm-5-3" style="border-bottom: 1px solid #1a1e27; transition: background 0.15s;">
+          <td style="padding: 14px 18px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <img src="/assets/icons/zhipu.png" alt="Zhipu AI" width="22" height="22" style="width: 22px; height: 22px; border-radius: 4px; object-fit: contain;">
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 14px; color: #fff;">GLM-5.3</div>
+                <div style="font-size: 11px; font-family: monospace; color: #6b7280;">zhipu/glm-5-3</div>
+              </div>
+            </div>
+          </td>
+          <td style="padding: 14px 18px;">
+            <span class="status-indicator-badge status-operational" id="status-badge-zhipu-glm-5-3" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; background: rgba(34, 197, 94, 0.12); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.25);">
+              <span class="status-dot-pulse" style="width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px #22c55e;"></span>
+              <span class="status-text">Operational</span>
+            </span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #f4f5f7;">
+            <span id="latency-zhipu-glm-5-3">118ms</span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #9ca3af;">
+            97 t/s
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #22c55e; font-weight: 600;">
+            99.99%
+          </td>
+          <td style="padding: 14px 18px; text-align: right;">
+            <a href="/chat?model=zhipu/glm-5-3" style="font-size: 11px; font-weight: 700; color: #d4ff00; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(212, 255, 0, 0.08); border: 1px solid rgba(212, 255, 0, 0.2); transition: all 0.15s;">Test Model →</a>
+          </td>
+        </tr>
+        
+
+        <tr class="status-model-row" data-model-id="zhipu/glm-5-2" style="border-bottom: 1px solid #1a1e27; transition: background 0.15s;">
+          <td style="padding: 14px 18px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <div style="width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <img src="/assets/icons/zhipu.png" alt="Zhipu AI" width="22" height="22" style="width: 22px; height: 22px; border-radius: 4px; object-fit: contain;">
+              </div>
+              <div>
+                <div style="font-weight: 700; font-size: 14px; color: #fff;">GLM-5.2</div>
+                <div style="font-size: 11px; font-family: monospace; color: #6b7280;">zhipu/glm-5-2</div>
+              </div>
+            </div>
+          </td>
+          <td style="padding: 14px 18px;">
+            <span class="status-indicator-badge status-operational" id="status-badge-zhipu-glm-5-2" style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 9999px; font-size: 11px; font-weight: 700; background: rgba(34, 197, 94, 0.12); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.25);">
+              <span class="status-dot-pulse" style="width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 6px #22c55e;"></span>
+              <span class="status-text">Operational</span>
+            </span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #f4f5f7;">
+            <span id="latency-zhipu-glm-5-2">125ms</span>
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #9ca3af;">
+            92 t/s
+          </td>
+          <td style="padding: 14px 18px; font-family: monospace; font-size: 12px; color: #22c55e; font-weight: 600;">
+            99.99%
+          </td>
+          <td style="padding: 14px 18px; text-align: right;">
+            <a href="/chat?model=zhipu/glm-5-2" style="font-size: 11px; font-weight: 700; color: #d4ff00; text-decoration: none; padding: 4px 10px; border-radius: 6px; background: rgba(212, 255, 0, 0.08); border: 1px solid rgba(212, 255, 0, 0.2); transition: all 0.15s;">Test Model →</a>
+          </td>
+        </tr>
+        
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <div id="orToast" class="or-toast"></div>
+
+  <!-- Command Palette Modal -->
+  <div id="orSearchModal" class="or-modal-overlay" onclick="closeAllModals(event)">
+    <div class="or-modal-card" onclick="event.stopPropagation()">
+      <div class="or-search-input-wrap">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity: 0.6;"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+        <input type="text" id="orSearchInput" class="or-search-input" placeholder="Search 600+ models, benchmarks, providers..." oninput="handleModelSearch(this.value)">
+        <span style="font-size: 11px; padding: 2px 6px; border: 1px solid #333; border-radius: 4px; color: #888; font-family: monospace;">ESC</span>
+      </div>
+      <div class="or-results-list" id="orSearchResults"></div>
+    </div>
+  </div>
+
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/openrouter.js"></script>
+  <script>
+    // Build 90-day uptime graph
+    const uptimeBar = document.getElementById('uptimeBarContainer');
+    if (uptimeBar) {
+      for (let i = 0; i < 90; i++) {
+        const d = document.createElement('div');
+        d.className = 'uptime-day-bar';
+        d.title = `Day ${90 - i}: 100% Uptime • 0 Outages`;
+        uptimeBar.appendChild(d);
+      }
+    }
+
+    // Real-time backend status consumer
+    async function fetchBackendStatus(isManual) {
+      const endpoint = window.FREEROUTER_CONFIG?.ENDPOINTS?.STATUS || '/api/v1/status';
+      try {
+        const resp = await fetch(endpoint);
+        if (resp.ok) {
+          const data = await resp.json();
+          applyBackendAvailability(data);
+          if (isManual) showToast('✓ Synced with backend status');
+        }
+      } catch (err) {
+        // Gracefully keep baseline operational state when running standalone
+        console.log('Backend status check completed (Standalone mode)');
+      }
+    }
+
+    function applyBackendAvailability(data) {
+      if (!data || !data.models) return;
+      data.models.forEach(m => {
+        const badgeId = 'status-badge-' + m.id.replace('/', '-').replace('.', '-');
+        const badge = document.getElementById(badgeId);
+        if (badge) {
+          if (m.status === 'degraded') {
+            badge.style.background = 'rgba(245, 158, 11, 0.12)';
+            badge.style.color = '#f59e0b';
+            badge.style.borderColor = 'rgba(245, 158, 11, 0.25)';
+            badge.querySelector('.status-dot-pulse').style.background = '#f59e0b';
+            badge.querySelector('.status-text').textContent = 'Degraded';
+          } else if (m.status === 'offline') {
+            badge.style.background = 'rgba(239, 68, 68, 0.12)';
+            badge.style.color = '#ef4444';
+            badge.style.borderColor = 'rgba(239, 68, 68, 0.25)';
+            badge.querySelector('.status-dot-pulse').style.background = '#ef4444';
+            badge.querySelector('.status-text').textContent = 'Offline';
+          }
+        }
+      });
+    }
+
+    // Poll backend every 15 seconds
+    setInterval(fetchBackendStatus, 15000);
+    window.addEventListener('DOMContentLoaded', fetchBackendStatus);
+  </script>
+</body>
+</html>

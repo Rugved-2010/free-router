@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en" class="dark" style="color-scheme: dark;">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Keys & Workspace | Free Router</title>
+  <link rel="icon" href="https://freerouter.ai/favicon/glyph.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/openrouter.css">
+  <style>
+    body {
+      background-color: #090a0b;
+      color: #f4f5f7;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    html.light body {
+      background-color: #f8fafc;
+      color: #0f172a;
+    }
+    
+    .keys-layout {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 30px 24px;
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 36px;
+    }
+    @media (max-width: 900px) {
+      .keys-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .keys-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .keys-sidebar-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #9ca3af;
+      text-decoration: none;
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      font-family: inherit;
+    }
+    .keys-sidebar-btn:hover {
+      color: #fff;
+      background: #181d24;
+    }
+    .keys-sidebar-btn.active {
+      color: #d4ff00;
+      background: #181d24;
+    }
+    html.light .keys-sidebar-btn:hover {
+      color: #0f172a;
+      background: #f1f5f9;
+    }
+    html.light .keys-sidebar-btn.active {
+      color: #2563eb;
+      background: #f1f5f9;
+    }
+
+    .sidebar-icon {
+      width: 16px;
+      height: 16px;
+      stroke-width: 2;
+      flex-shrink: 0;
+    }
+
+    .workspace-section {
+      display: none;
+    }
+    .workspace-section.active-tab {
+      display: block;
+      animation: tabFade 0.15s ease-out;
+    }
+    @keyframes tabFade {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .keys-table-card {
+      background: #12151a;
+      border: 1px solid #1f242d;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+    html.light .keys-table-card {
+      background: #ffffff;
+      border-color: #e2e8f0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    table.keys-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13px;
+    }
+    table.keys-table th {
+      background: #181d24;
+      padding: 14px 18px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #9ca3af;
+      border-bottom: 1px solid #1f242d;
+    }
+    html.light table.keys-table th {
+      background: #f1f5f9;
+      color: #475569;
+      border-color: #e2e8f0;
+    }
+    table.keys-table td {
+      padding: 16px 18px;
+      border-bottom: 1px solid #1a1e27;
+      vertical-align: middle;
+    }
+    html.light table.keys-table td {
+      border-color: #f1f5f9;
+    }
+
+    .key-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      background: #181d24;
+      border: 1px solid #282d37;
+      padding: 3px 8px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    html.light .key-badge {
+      background: #f1f5f9;
+      border-color: #e2e8f0;
+    }
+
+    .action-icon-btn {
+      background: none;
+      border: 1px solid transparent;
+      color: #9ca3af;
+      padding: 6px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+    .action-icon-btn:hover {
+      background: #1f242d;
+      color: #fff;
+      border-color: #2d3440;
+    }
+    .action-icon-btn.danger:hover {
+      background: rgba(239, 68, 68, 0.15);
+      color: #ef4444;
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Free Router Navbar -->
+  <header style="background: rgba(9, 10, 11, 0.9); backdrop-filter: blur(12px); border-bottom: 1px solid #1f242d; position: sticky; top: 0; z-index: 100;">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 0 24px; height: 60px; display: flex; align-items: center; justify-content: space-between;">
+      <div style="display: flex; align-items: center; gap: 24px;">
+        <a href="/" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; font-weight: 700; font-size: 16px;">
+          <span style="display: inline-flex; align-items: center; gap: 8px;">
+  <svg width="26" height="20" viewBox="19.82 17.199 365.556 258.298" xmlns="http://www.w3.org/2000/svg" style="height: 20px; width: auto; color: #d4ff00;" fill="currentColor"><path d="M303.9475,17.19926c42.79734,0,77.48933,34.69327,77.48933,77.48933s-34.69199,77.48933-77.48933,77.48933l76.86166,76.86244c9.76367,9.76313,2.84903,26.45667-10.95697,26.45667h-220.88335c-71.32686,0-129.14889-57.82202-129.14889-129.14889S77.64197,17.19926,148.96884,17.19926h154.97866ZM148.96884,68.85881c-42.79607,0-77.48933,34.69327-77.48933,77.48933s34.69327,77.48933,77.48933,77.48933,77.48933-34.69327,77.48933-77.48933-34.69327-77.48933-77.48933-77.48933Z"></path></svg>
+  <span style="font-weight: 800; font-size: 18px; letter-spacing: -0.03em; color: var(--foreground, #fff); font-family: 'Plus Jakarta Sans', sans-serif;">freerouter</span>
+</span>
+        </a>
+        <button onclick="openSearchModal()" style="display: flex; align-items: center; gap: 8px; background: #12151a; border: 1px solid #1f242d; border-radius: 9999px; padding: 6px 14px; font-size: 13px; color: #9ca3af; cursor: pointer;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+          <span>Search models...</span>
+          <span style="font-family: monospace; font-size: 11px; background: #181d24; border: 1px solid #282d37; padding: 1px 5px; border-radius: 4px;">⌘K</span>
+        </button>
+      </div>
+
+      <!-- Center nav links -->
+      <nav style="display: flex; align-items: center; gap: 4px;">
+        <a href="/models" class="keys-sidebar-btn" style="width: auto; padding: 6px 12px;">Models</a>
+        <a href="/chat" class="keys-sidebar-btn" style="width: auto; padding: 6px 12px;">Chat</a>
+        
+        <a href="/pricing" class="keys-sidebar-btn" style="width: auto; padding: 6px 12px;">Pricing</a>
+        <a href="/status" class="keys-sidebar-btn" style="width: auto; padding: 6px 12px;">Status</a>
+        <a href="/keys" class="keys-sidebar-btn active" style="width: auto; padding: 6px 12px;">Keys</a>
+        
+      </nav>
+
+      <!-- Right user menu & balance -->
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 8px; background: #12151a; border: 1px solid #1f242d; padding: 5px 12px; border-radius: 9999px; font-size: 12px; font-weight: 600;">
+          <span style="color: #9ca3af;">Credits:</span>
+          <span style="color: #d4ff00; font-family: monospace;" id="userCreditsDisplay">$100.00</span>
+        </div>
+
+        <!-- Profile Avatar & Dropdown Trigger -->
+        <div style="position: relative;">
+          <button id="profileDropdownBtn" onclick="toggleProfileMenu()" style="display: flex; align-items: center; gap: 8px; background: none; border: none; cursor: pointer; color: inherit; padding: 0;">
+            <div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #3b82f6, #6366f1); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; color: #fff;">
+              OR
+            </div>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+
+          <!-- Dropdown menu -->
+          <div id="profileMenu" style="display: none; position: absolute; right: 0; top: 42px; width: 220px; background: #12151a; border: 1px solid #1f242d; border-radius: 12px; box-shadow: 0 12px 30px rgba(0,0,0,0.6); padding: 6px; z-index: 1000;">
+            <div style="padding: 10px 12px; border-bottom: 1px solid #1f242d; margin-bottom: 4px;">
+              <div style="font-weight: 700; font-size: 13px;">Personal Workspace</div>
+              <div style="font-size: 11px; color: #9ca3af;">owner@freerouter.ai</div>
+            </div>
+            <a href="/keys" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 6px; font-size: 13px; color: #f4f5f7; text-decoration: none;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg>
+              <span>API Keys</span>
+            </a>
+            <a href="/chat" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 6px; font-size: 13px; color: #f4f5f7; text-decoration: none;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              <span>Chat Playground</span>
+            </a>
+            <a href="/models" style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 6px; font-size: 13px; color: #f4f5f7; text-decoration: none;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg>
+              <span>Browse Models</span>
+            </a>
+            <div style="border-top: 1px solid #1f242d; margin: 4px 0;"></div>
+            <button onclick="setTheme(document.documentElement.classList.contains('dark') ? 'light' : 'dark')" style="display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 8px 12px; border-radius: 6px; font-size: 13px; color: #f4f5f7; background: none; border: none; cursor: pointer; text-align: left;">
+              <span>Toggle Theme</span>
+            </button>
+            <button onclick="showToast('Logged out');" style="display: flex; align-items: center; gap: 10px; width: 100%; padding: 8px 12px; border-radius: 6px; font-size: 13px; color: #ef4444; background: none; border: none; cursor: pointer; text-align: left;">
+              <span>Sign Out</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Keys Layout -->
+  <div class="keys-layout">
+    
+    <!-- Professional Sidebar with Lucide SVGs -->
+    <aside class="keys-sidebar">
+      <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: #6b7280; letter-spacing: 0.05em; margin-bottom: 8px; padding-left: 10px;">
+        Workspace Settings
+      </div>
+      
+      <!-- Tab 1: API Keys -->
+      <button class="keys-sidebar-btn active" id="tabBtn-keys" onclick="switchWorkspaceTab('keys')">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg>
+        <span>API Keys</span>
+      </button>
+
+      <!-- Nav Link to Chat -->
+      <a href="/chat" class="keys-sidebar-btn">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <span>Chat Playground</span>
+      </a>
+
+      <!-- Nav Link to Models -->
+      <a href="/models" class="keys-sidebar-btn">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg>
+        <span>Models Catalog</span>
+      </a>
+
+      <!-- Nav Link to Rankings -->
+      
+
+      <!-- Tab 2: Credits & Billing -->
+      <button class="keys-sidebar-btn" id="tabBtn-billing" onclick="switchWorkspaceTab('billing')">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+        <span>Credits & Billing</span>
+      </button>
+
+      <!-- Tab 3: Data Policies -->
+      <button class="keys-sidebar-btn" id="tabBtn-privacy" onclick="switchWorkspaceTab('privacy')">
+        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+        <span>Data Policies & ZDR</span>
+      </button>
+    </aside>
+
+    <!-- Main Workspace Content Area -->
+    <main>
+      
+      <!-- TAB 1: API KEYS SECTION -->
+      <section id="section-keys" class="workspace-section active-tab">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px;">
+          <div>
+            <h1 style="font-size: 26px; font-weight: 800; margin: 0 0 6px 0; letter-spacing: -0.02em;">API Keys</h1>
+            <p style="font-size: 14px; color: #9ca3af; margin: 0; max-width: 620px;">
+              Your secret API keys authenticate requests with the Free Router API. Use these keys directly in the OpenAI SDK by setting <code style="font-family: monospace; color: #d4ff00; background: #181d24; padding: 2px 5px; border-radius: 4px;">baseURL = "https://freerouter.ai/api/v1"</code>.
+            </p>
+          </div>
+          <button onclick="openCreateKeyModal()" style="display: inline-flex; align-items: center; gap: 8px; background: #d4ff00; color: #000; font-weight: 700; font-size: 13px; border: none; padding: 10px 18px; border-radius: 8px; cursor: pointer; transition: all 0.15s; box-shadow: 0 0 16px rgba(212, 255, 0, 0.25);">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+            <span>Create Key</span>
+          </button>
+        </div>
+
+        <!-- Metrics Ribbon -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px;">
+          <div style="background: #12151a; border: 1px solid #1f242d; border-radius: 12px; padding: 16px 20px;">
+            <div style="font-size: 12px; color: #9ca3af; font-weight: 600;">Active Keys</div>
+            <div style="font-size: 24px; font-weight: 800; font-family: monospace; margin-top: 4px;" id="activeKeysCount">0</div>
+          </div>
+          <div style="background: #12151a; border: 1px solid #1f242d; border-radius: 12px; padding: 16px 20px;">
+            <div style="font-size: 12px; color: #9ca3af; font-weight: 600;">Token Usage (This Month)</div>
+            <div style="font-size: 24px; font-weight: 800; font-family: monospace; color: #3b82f6; margin-top: 4px;">42.8M</div>
+          </div>
+          <div style="background: #12151a; border: 1px solid #1f242d; border-radius: 12px; padding: 16px 20px;">
+            <div style="font-size: 12px; color: #9ca3af; font-weight: 600;">Average Edge Latency</div>
+            <div style="font-size: 24px; font-weight: 800; font-family: monospace; color: #22c55e; margin-top: 4px;">128ms</div>
+          </div>
+        </div>
+
+        <!-- API Keys Table Card -->
+        <div class="keys-table-card">
+          <table class="keys-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Key Token</th>
+                <th>Created</th>
+                <th>Last Used</th>
+                <th>Credit Limit</th>
+                <th style="text-align: right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="keysTableBody"></tbody>
+          </table>
+        </div>
+
+        <!-- Code Integration Example -->
+        <div style="margin-top: 36px; background: #12151a; border: 1px solid #1f242d; border-radius: 14px; padding: 24px;">
+          <h3 style="font-size: 16px; font-weight: 700; margin: 0 0 8px 0;">Integration Quickstart</h3>
+          <p style="font-size: 13px; color: #9ca3af; margin: 0 0 16px 0;">Use any generated key with the official OpenAI client:</p>
+          <div style="background: #0d1117; border: 1px solid #23272f; border-radius: 8px; padding: 16px; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.6; color: #e6edf3; overflow-x: auto;">
+            <div style="color: #7ee787;"># Python Example</div>
+            <div>from openai import OpenAI</div>
+            <div>client = OpenAI(</div>
+            <div>&nbsp;&nbsp;base_url="https://freerouter.ai/api/v1",</div>
+            <div>&nbsp;&nbsp;api_key="<span id="sampleKeyInCode" style="color: #d4ff00;">sk-or-v1-••••••••••••••••</span>",</div>
+            <div>)</div>
+            <div>completion = client.chat.completions.create(</div>
+            <div>&nbsp;&nbsp;model="anthropic/claude-opus-5.5",</div>
+            <div>&nbsp;&nbsp;messages=[{"role": "user", "content": "Hello Free Router!"}]</div>
+            <div>)</div>
+            <div>print(completion.choices[0].message.content)</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: CREDITS & BILLING SECTION -->
+      <section id="section-billing" class="workspace-section">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px;">
+          <div>
+            <h1 style="font-size: 26px; font-weight: 800; margin: 0 0 6px 0; letter-spacing: -0.02em;">Credits & Billing</h1>
+            <p style="font-size: 14px; color: #9ca3af; margin: 0;">Purchase universal credits to generate tokens across all 600+ AI models without vendor lock-in.</p>
+          </div>
+          <button onclick="addCreditsPrompt()" style="background: #d4ff00; color: #000; font-weight: 700; font-size: 13px; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;">+ Add Credits</button>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px;">
+          <div style="background: #12151a; border: 1px solid #1f242d; border-radius: 14px; padding: 24px;">
+            <div style="font-size: 12px; color: #9ca3af; font-weight: 600;">Current Balance</div>
+            <div style="font-size: 38px; font-weight: 800; font-family: monospace; color: #d4ff00; margin: 8px 0 16px 0;">$100.00</div>
+            <button onclick="addCreditsPrompt()" style="background: #181d24; border: 1px solid #282d37; color: #fff; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;">Top up balance</button>
+          </div>
+
+          <div style="background: #12151a; border: 1px solid #1f242d; border-radius: 14px; padding: 24px;">
+            <div style="font-size: 12px; color: #9ca3af; font-weight: 600;">Auto-Refill</div>
+            <div style="font-size: 14px; font-weight: 700; margin: 8px 0 4px 0;">Enabled ($20 threshold)</div>
+            <p style="font-size: 12px; color: #9ca3af; margin-bottom: 14px;">Automatically recharge $50 when credits drop below $20 to prevent production outages.</p>
+            <span style="font-size: 11px; padding: 2px 8px; border-radius: 9999px; background: rgba(34, 197, 94, 0.15); color: #22c55e; border: 1px solid rgba(34, 197, 94, 0.3);">Payment Method: Visa ending in 4242</span>
+          </div>
+        </div>
+
+        <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 14px;">Recent Transactions</h3>
+        <div class="keys-table-card">
+          <table class="keys-table">
+            <thead>
+              <tr><th>Date</th><th>Description</th><th>Amount</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Nov 1, 2026</td><td>Credit Purchase (Stripe Checkout)</td><td>+$100.00</td><td><span style="color: #22c55e;">Succeeded</span></td></tr>
+              <tr><td>Oct 20, 2026</td><td>Credit Purchase (Stripe Checkout)</td><td>+$50.00</td><td><span style="color: #22c55e;">Succeeded</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- TAB 3: DATA POLICIES & ZDR SECTION -->
+      <section id="section-privacy" class="workspace-section">
+        <h1 style="font-size: 26px; font-weight: 800; margin: 0 0 6px 0; letter-spacing: -0.02em;">Data Policies & Security</h1>
+        <p style="font-size: 14px; color: #9ca3af; margin: 0 0 28px 0;">Control how upstream providers log and retain your prompts, and configure regulatory compliance boundaries.</p>
+
+        <div style="background: #12151a; border: 1px solid #1f242d; border-radius: 14px; padding: 24px; margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div style="font-weight: 700; font-size: 15px;">Zero Data Retention (ZDR) Enforcement</div>
+              <div style="font-size: 13px; color: #9ca3af; margin-top: 4px;">Only route requests to providers who guarantee 0-day retention and do not train on your inputs.</div>
+            </div>
+            <input type="checkbox" checked style="width: 20px; height: 20px; accent-color: #d4ff00; cursor: pointer;" onchange="showToast('Zero Data Retention policy updated')">
+          </div>
+        </div>
+
+        <div style="background: #12151a; border: 1px solid #1f242d; border-radius: 14px; padding: 24px; margin-bottom: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div style="font-weight: 700; font-size: 15px;">EU Data Boundary Routing</div>
+              <div style="font-size: 13px; color: #9ca3af; margin-top: 4px;">Restrict inference routing exclusively to data centers and edge nodes located within the European Economic Area.</div>
+            </div>
+            <input type="checkbox" style="width: 20px; height: 20px; accent-color: #d4ff00; cursor: pointer;" onchange="showToast('EU Data Boundary policy updated')">
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Create API Key Modal Dialog -->
+  <div id="createKeyModal" class="or-modal-overlay" onclick="closeCreateKeyModal(event)">
+    <div class="or-modal-card" onclick="event.stopPropagation()" style="max-width: 480px; padding: 28px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+        <h3 style="font-size: 20px; font-weight: 700; margin: 0;">Create API Key</h3>
+        <button class="or-modal-close-btn" onclick="closeCreateKeyModal()">&times;</button>
+      </div>
+
+      <!-- Step 1: Form -->
+      <div id="createKeyFormView">
+        <p style="font-size: 13px; color: #9ca3af; margin-bottom: 20px;">
+          Give your key a descriptive name to identify its usage in logs and rate limit tracking.
+        </p>
+
+        <div style="margin-bottom: 16px;">
+          <label style="display: block; font-size: 12px; font-weight: 700; margin-bottom: 6px; color: #d1d5db;">Key Name</label>
+          <input type="text" id="newKeyNameInput" placeholder="e.g. Production Backend, Cursor IDE, Test App" style="width: 100%; box-sizing: border-box; background: #181d24; border: 1px solid #282d37; color: #fff; padding: 10px 14px; border-radius: 8px; font-size: 13px; outline: none;">
+        </div>
+
+        <div style="margin-bottom: 24px;">
+          <label style="display: block; font-size: 12px; font-weight: 700; margin-bottom: 6px; color: #d1d5db;">Credit Limit (USD)</label>
+          <input type="text" id="newKeyLimitInput" placeholder="Optional (e.g. 50 or leave blank for Unlimited)" style="width: 100%; box-sizing: border-box; background: #181d24; border: 1px solid #282d37; color: #fff; padding: 10px 14px; border-radius: 8px; font-size: 13px; outline: none;">
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button onclick="closeCreateKeyModal()" style="background: none; border: 1px solid #282d37; color: #9ca3af; font-weight: 600; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-size: 13px;">Cancel</button>
+          <button onclick="executeKeyCreation()" style="background: #d4ff00; color: #000; font-weight: 700; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 13px;">Create Key</button>
+        </div>
+      </div>
+
+      <!-- Step 2: Key Reveal Screen -->
+      <div id="keyRevealView" style="display: none;">
+        <div style="background: rgba(34, 197, 94, 0.12); border: 1px solid rgba(34, 197, 94, 0.25); border-radius: 8px; padding: 12px; margin-bottom: 18px; font-size: 13px; color: #22c55e;">
+          ✓ Key created successfully! Copy this key now — you will not be able to view it again.
+        </div>
+
+        <div style="background: #0d1117; border: 1px solid #23272f; border-radius: 8px; padding: 14px; font-family: monospace; font-size: 13px; color: #d4ff00; word-break: break-all; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+          <span id="revealedSecretKey"></span>
+          <button onclick="copyRevealedKey()" style="background: #181d24; border: 1px solid #282d37; color: #fff; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 11px; white-space: nowrap;">Copy Key</button>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end;">
+          <button onclick="closeCreateKeyModal()" style="background: #d4ff00; color: #000; font-weight: 700; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 13px;">Done</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="orToast" class="or-toast"></div>
+
+  <!-- Command Palette Modal -->
+  <div id="orSearchModal" class="or-modal-overlay" onclick="closeAllModals(event)">
+    <div class="or-modal-card" onclick="event.stopPropagation()">
+      <div class="or-search-input-wrap">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity: 0.6;"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+        <input type="text" id="orSearchInput" class="or-search-input" placeholder="Search 600+ models, benchmarks, providers..." oninput="handleModelSearch(this.value)">
+        <span style="font-size: 11px; padding: 2px 6px; border: 1px solid #333; border-radius: 4px; color: #888; font-family: monospace;">ESC</span>
+      </div>
+      <div class="or-results-list" id="orSearchResults"></div>
+    </div>
+  </div>
+
+  <script src="/assets/js/openrouter.js"></script>
+  <script>
+    // Tab Switcher between Keys, Billing, and Privacy
+    function switchWorkspaceTab(tabId) {
+      document.querySelectorAll('.workspace-section').forEach(s => s.classList.remove('active-tab'));
+      document.querySelectorAll('.keys-sidebar-btn').forEach(b => b.classList.remove('active'));
+
+      const targetSection = document.getElementById('section-' + tabId);
+      const targetBtn = document.getElementById('tabBtn-' + tabId);
+      if (targetSection) targetSection.classList.add('active-tab');
+      if (targetBtn) targetBtn.classList.add('active');
+    }
+
+    // API Keys state management with localStorage
+    function getStoredKeys() {
+      const saved = localStorage.getItem('or_user_keys');
+      if (saved) {
+        try { return JSON.parse(saved); } catch(e) {}
+      }
+      return [
+        { id: 'k1', name: 'Default Development Key', key: 'sk-or-v1-84f9a012b9c834a7d65e23f01948ba2c7104d5e9a3b681f0', created: 'Nov 1, 2026', lastUsed: '5 mins ago', limit: 'Unlimited' },
+        { id: 'k2', name: 'Production Backend', key: 'sk-or-v1-92e104c81a7b63f049d5a8c271e04b9a38f712c01948d5ea', created: 'Oct 28, 2026', lastUsed: 'Just now', limit: '$100.00' }
+      ];
+    }
+
+    function saveStoredKeys(keys) {
+      localStorage.setItem('or_user_keys', JSON.stringify(keys));
+      renderKeysTable();
+    }
+
+    function renderKeysTable() {
+      const keys = getStoredKeys();
+      const tbody = document.getElementById('keysTableBody');
+      const countEl = document.getElementById('activeKeysCount');
+      if (countEl) countEl.textContent = keys.length;
+
+      if (keys.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #9ca3af; padding: 36px;">No API keys found. Click "+ Create Key" to generate your first key.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = keys.map(k => {
+        const masked = k.key.substring(0, 12) + '••••••••••••••••' + k.key.substring(k.key.length - 4);
+        return `
+          <tr>
+            <td><strong style="color: #fff;">${k.name}</strong></td>
+            <td>
+              <span class="key-badge">
+                <span>${masked}</span>
+                <button class="action-icon-btn" title="Copy Key" onclick="copyKeyToClipboard('${k.key}')">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                </button>
+              </span>
+            </td>
+            <td style="color: #9ca3af;">${k.created}</td>
+            <td style="color: #9ca3af;">${k.lastUsed}</td>
+            <td><span style="font-family: monospace; font-size: 12px; color: ${k.limit === 'Unlimited' ? '#9ca3af' : '#d4ff00'};">${k.limit}</span></td>
+            <td style="text-align: right;">
+              <button class="action-icon-btn danger" title="Revoke Key" onclick="deleteApiKey('${k.id}')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function copyKeyToClipboard(keyStr) {
+      navigator.clipboard.writeText(keyStr).then(() => {
+        showToast('✓ Key copied to clipboard!');
+      });
+    }
+
+    function deleteApiKey(keyId) {
+      if (confirm('Are you sure you want to revoke this API key? Any applications currently using it will be unable to access Free Router.')) {
+        let keys = getStoredKeys();
+        keys = keys.filter(k => k.id !== keyId);
+        saveStoredKeys(keys);
+        showToast('✓ Key revoked successfully');
+      }
+    }
+
+    function openCreateKeyModal() {
+      document.getElementById('createKeyModal').classList.add('or-active');
+      document.getElementById('createKeyFormView').style.display = 'block';
+      document.getElementById('keyRevealView').style.display = 'none';
+      document.getElementById('newKeyNameInput').value = '';
+      document.getElementById('newKeyLimitInput').value = '';
+      setTimeout(() => document.getElementById('newKeyNameInput').focus(), 50);
+    }
+
+    function closeCreateKeyModal(e) {
+      document.getElementById('createKeyModal').classList.remove('or-active');
+    }
+
+    function executeKeyCreation() {
+      const nameInput = document.getElementById('newKeyNameInput');
+      const limitInput = document.getElementById('newKeyLimitInput');
+      const name = nameInput.value.trim() || 'API Key ' + (getStoredKeys().length + 1);
+      const limit = limitInput.value.trim() ? '$' + limitInput.value.replace('$', '') : 'Unlimited';
+
+      // Generate random 48-char hex token
+      const randomHex = Array.from(crypto.getRandomValues(new Uint8Array(24))).map(b => b.toString(16).padStart(2, '0')).join('');
+      const fullKey = 'sk-or-v1-' + randomHex;
+
+      const newKeyObj = {
+        id: 'k_' + Date.now(),
+        name: name,
+        key: fullKey,
+        created: 'Today',
+        lastUsed: 'Never',
+        limit: limit
+      };
+
+      const keys = getStoredKeys();
+      keys.unshift(newKeyObj);
+      saveStoredKeys(keys);
+
+      // Show reveal screen
+      document.getElementById('createKeyFormView').style.display = 'none';
+      document.getElementById('keyRevealView').style.display = 'block';
+      document.getElementById('revealedSecretKey').textContent = fullKey;
+    }
+
+    function copyRevealedKey() {
+      const fullKey = document.getElementById('revealedSecretKey').textContent;
+      copyKeyToClipboard(fullKey);
+    }
+
+    function addCreditsPrompt() {
+      const amt = prompt('Enter credit amount to add ($ USD):', '50');
+      if (amt && !isNaN(amt)) {
+        const current = 100.00 + parseFloat(amt);
+        document.getElementById('userCreditsDisplay').textContent = '$' + current.toFixed(2);
+        showToast('✓ Added $' + parseFloat(amt).toFixed(2) + ' credits to your balance!');
+      }
+    }
+
+    function toggleProfileMenu() {
+      const menu = document.getElementById('profileMenu');
+      menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+    }
+
+    document.addEventListener('click', (e) => {
+      const btn = document.getElementById('profileDropdownBtn');
+      const menu = document.getElementById('profileMenu');
+      if (menu && btn && !btn.contains(e.target) && !menu.contains(e.target)) {
+        menu.style.display = 'none';
+      }
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderKeysTable();
+    });
+  </script>
+</body>
+</html>

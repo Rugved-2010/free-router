@@ -1,0 +1,18 @@
+{
+  "name": "freerouter",
+  "version": "1.0.0",
+  "description": "Production client-side frontend platform for Free Router with 31 frontier models, real-time catalog search, AI chat playground, API key manager, and live status monitoring.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "freerouter",
+    "ai-models",
+    "llm-router",
+    "frontend"
+  ],
+  "author": "Rugved-2010",
+  "license": "MIT"
+}

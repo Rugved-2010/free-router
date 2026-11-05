@@ -1,0 +1,627 @@
+[
+  {
+    "id": "anthropic/claude-opus-5.5",
+    "name": "Claude Opus 5.5",
+    "author": "anthropic",
+    "author_display": "Anthropic",
+    "category": "text",
+    "tags": [
+      "Frontier",
+      "1.0M Context",
+      "128k Output",
+      "50% OFF"
+    ],
+    "desc": "Anthropic's flagship model for demanding reasoning, large codebase refactoring, and long-horizon agentic work. Full 1,000,000-token context window with up to 128,000 completion tokens.",
+    "context": "1.0M",
+    "official_in": "$4.00",
+    "official_out": "$20.00",
+    "input_price": "$2.00",
+    "output_price": "$10.00",
+    "throughput": "63 t/s",
+    "latency": "142ms"
+  },
+  {
+    "id": "anthropic/claude-sonnet-5-5",
+    "name": "Claude Sonnet 5.5",
+    "author": "anthropic",
+    "author_display": "Anthropic",
+    "category": "text",
+    "tags": [
+      "Frontier",
+      "1.0M Context",
+      "Fast",
+      "50% OFF"
+    ],
+    "desc": "Anthropic's most capable Sonnet-class model with frontier performance across coding, agents, and professional work. Full 1M-token context window with adaptive thinking.",
+    "context": "1.0M",
+    "official_in": "$2.00",
+    "official_out": "$10.00",
+    "input_price": "$1.00",
+    "output_price": "$5.00",
+    "throughput": "74 t/s",
+    "latency": "110ms"
+  },
+  {
+    "id": "anthropic/claude-fable-5-1",
+    "name": "Claude Fable 5.1",
+    "author": "anthropic",
+    "author_display": "Anthropic",
+    "category": "text",
+    "tags": [
+      "1.0M Context",
+      "Creative",
+      "Autonomous",
+      "50% OFF"
+    ],
+    "desc": "Mythos-class model built for autonomous knowledge work, end-to-end coding, and nuanced literature synthesis with a massive 1,000,000-token context window.",
+    "context": "1.0M",
+    "official_in": "$10.00",
+    "official_out": "$50.00",
+    "input_price": "$5.00",
+    "output_price": "$25.00",
+    "throughput": "66 t/s",
+    "latency": "150ms"
+  },
+  {
+    "id": "anthropic/claude-haiku-5-5",
+    "name": "Claude Haiku 5.5",
+    "author": "anthropic",
+    "author_display": "Anthropic",
+    "category": "text",
+    "tags": [
+      "1.0M Context",
+      "Fast",
+      "50% OFF"
+    ],
+    "desc": "Next-generation lightweight frontier intelligence with a full 1,000,000-token context window. Highly efficient for large document queries and edge-streaming tasks.",
+    "context": "1.0M",
+    "official_in": "$0.10",
+    "official_out": "$0.50",
+    "input_price": "$0.05",
+    "output_price": "$0.25",
+    "throughput": "180 t/s",
+    "latency": "68ms"
+  },
+  {
+    "id": "anthropic/claude-opus-4-7",
+    "name": "Claude Opus 4.7",
+    "author": "anthropic",
+    "author_display": "Anthropic",
+    "category": "text",
+    "tags": [
+      "1.0M Context",
+      "Reasoning",
+      "50% OFF"
+    ],
+    "desc": "High-capacity Opus 4 release with a 1,000,000-token context window for repository-scale codebase auditing and financial risk modeling.",
+    "context": "1.0M",
+    "official_in": "$5.00",
+    "official_out": "$25.00",
+    "input_price": "$2.50",
+    "output_price": "$12.50",
+    "throughput": "78 t/s",
+    "latency": "155ms"
+  },
+  {
+    "id": "anthropic/claude-opus-4-6",
+    "name": "Claude Opus 4.6",
+    "author": "anthropic",
+    "author_display": "Anthropic",
+    "category": "text",
+    "tags": [
+      "1.0M Context",
+      "Coding",
+      "50% OFF"
+    ],
+    "desc": "Enterprise architecture checkpoint supporting 1M tokens context for multi-file Git diff comprehension and complex vulnerability triage.",
+    "context": "1.0M",
+    "official_in": "$5.00",
+    "official_out": "$25.00",
+    "input_price": "$2.50",
+    "output_price": "$12.50",
+    "throughput": "76 t/s",
+    "latency": "160ms"
+  },
+  {
+    "id": "anthropic/claude-opus-4-5",
+    "name": "Claude Opus 4.5",
+    "author": "anthropic",
+    "author_display": "Anthropic",
+    "category": "text",
+    "tags": [
+      "200K Context",
+      "64k Output",
+      "50% OFF"
+    ],
+    "desc": "Proven 200,000-token context model with 64,000 completion tokens, renowned for high reasoning accuracy and reliable structured outputs.",
+    "context": "200K",
+    "official_in": "$5.00",
+    "official_out": "$25.00",
+    "input_price": "$2.50",
+    "output_price": "$12.50",
+    "throughput": "75 t/s",
+    "latency": "165ms"
+  },
+  {
+    "id": "anthropic/claude-haiku-4-5",
+    "name": "Claude Haiku 4.5",
+    "author": "anthropic",
+    "author_display": "Anthropic",
+    "category": "text",
+    "tags": [
+      "200K Context",
+      "Fast",
+      "50% OFF"
+    ],
+    "desc": "Compact 200,000-token context model designed for high-concurrency categorizations, quick text processing, and rapid filtering.",
+    "context": "200K",
+    "official_in": "$0.25",
+    "official_out": "$1.25",
+    "input_price": "$0.125",
+    "output_price": "$0.625",
+    "throughput": "195 t/s",
+    "latency": "65ms"
+  },
+  {
+    "id": "anthropic/claude-opus-4-1",
+    "name": "Claude Opus 4.1",
+    "author": "anthropic",
+    "author_display": "Anthropic",
+    "category": "text",
+    "tags": [
+      "200K Context",
+      "Stable",
+      "50% OFF"
+    ],
+    "desc": "Long-term stable enterprise release with 200,000 tokens context for audited compliance pipelines and financial contracts.",
+    "context": "200K",
+    "official_in": "$15.00",
+    "official_out": "$75.00",
+    "input_price": "$7.50",
+    "output_price": "$37.50",
+    "throughput": "74 t/s",
+    "latency": "170ms"
+  },
+  {
+    "id": "anthropic/claude-opus-4-0",
+    "name": "Claude Opus 4.0",
+    "author": "anthropic",
+    "author_display": "Anthropic",
+    "category": "text",
+    "tags": [
+      "200K Context",
+      "Legacy",
+      "50% OFF"
+    ],
+    "desc": "The foundational release of Anthropic's Opus 4 architecture with 200,000 tokens context window.",
+    "context": "200K",
+    "official_in": "$15.00",
+    "official_out": "$75.00",
+    "input_price": "$7.50",
+    "output_price": "$37.50",
+    "throughput": "72 t/s",
+    "latency": "180ms"
+  },
+  {
+    "id": "zhipu/glm-5-3-flashx-legal",
+    "name": "GLM-5.3 FlashX Legal",
+    "author": "zhipu",
+    "author_display": "Zhipu AI",
+    "category": "decisions",
+    "tags": [
+      "1.05M Context",
+      "Legal",
+      "50% OFF"
+    ],
+    "desc": "Domain-fine-tuned legal reasoning engine featuring an immense 1,048,576-token context window for statutory interpretation, contract review, and case law citations.",
+    "context": "1.05M",
+    "official_in": "$0.37",
+    "official_out": "$1.25",
+    "input_price": "$0.185",
+    "output_price": "$0.625",
+    "throughput": "155 t/s",
+    "latency": "95ms"
+  },
+  {
+    "id": "zhipu/glm-5-3-flashx",
+    "name": "GLM-5.3 FlashX",
+    "author": "zhipu",
+    "author_display": "Zhipu AI",
+    "category": "text",
+    "tags": [
+      "1.05M Context",
+      "Extreme-Speed",
+      "50% OFF"
+    ],
+    "desc": "Accelerated inference model achieving over 200 tokens/sec across a 1,048,576-token context window with strong Chinese/English bilingual capability.",
+    "context": "1.05M",
+    "official_in": "$0.10",
+    "official_out": "$0.30",
+    "input_price": "$0.05",
+    "output_price": "$0.15",
+    "throughput": "210 t/s",
+    "latency": "55ms"
+  },
+  {
+    "id": "zhipu/glm-5-3-flash",
+    "name": "GLM-5.3 Flash",
+    "author": "zhipu",
+    "author_display": "Zhipu AI",
+    "category": "text",
+    "tags": [
+      "1.05M Context",
+      "Fast",
+      "50% OFF"
+    ],
+    "desc": "Ultra-lightweight Flash edition with a full 1,048,576-token context window. Priced at 50% discount for high-volume document search.",
+    "context": "1.05M",
+    "official_in": "$0.0285",
+    "official_out": "$0.0923",
+    "input_price": "$0.0142",
+    "output_price": "$0.0461",
+    "throughput": "225 t/s",
+    "latency": "50ms"
+  },
+  {
+    "id": "zhipu/glm-5-3",
+    "name": "GLM-5.3",
+    "author": "zhipu",
+    "author_display": "Zhipu AI",
+    "category": "text",
+    "tags": [
+      "1.05M Context",
+      "Reasoning",
+      "50% OFF"
+    ],
+    "desc": "Full-size flagship GLM model with a 1,048,576-token context window, advanced mathematical proofs, function calling, and structured bilingual reasoning.",
+    "context": "1.05M",
+    "official_in": "$0.0699",
+    "official_out": "$1.40",
+    "input_price": "$0.035",
+    "output_price": "$0.70",
+    "throughput": "97 t/s",
+    "latency": "118ms"
+  },
+  {
+    "id": "zhipu/glm-5-2",
+    "name": "GLM-5.2",
+    "author": "zhipu",
+    "author_display": "Zhipu AI",
+    "category": "text",
+    "tags": [
+      "1.05M Context",
+      "Bilingual",
+      "50% OFF"
+    ],
+    "desc": "Widely deployed previous stable release of the General Language Model architecture with a full 1,048,576-token context window.",
+    "context": "1.05M",
+    "official_in": "$0.05",
+    "official_out": "$1.20",
+    "input_price": "$0.025",
+    "output_price": "$0.60",
+    "throughput": "92 t/s",
+    "latency": "125ms"
+  },
+  {
+    "id": "openai/gpt-6.1-terra",
+    "name": "GPT-6.1 Terra",
+    "author": "openai",
+    "author_display": "OpenAI",
+    "category": "text",
+    "tags": [
+      "1.05M Context",
+      "Frontier",
+      "50% OFF"
+    ],
+    "desc": "Massive 1,050,000-token context window frontier model designed for ingesting whole code repositories, enterprise data lakes, and complex multi-hour transcripts.",
+    "context": "1.05M",
+    "official_in": "$1.00",
+    "official_out": "$5.00",
+    "input_price": "$0.50",
+    "output_price": "$2.50",
+    "throughput": "105 t/s",
+    "latency": "145ms"
+  },
+  {
+    "id": "openai/gpt-6.1-sol",
+    "name": "GPT-6.1 Sol",
+    "author": "openai",
+    "author_display": "OpenAI",
+    "category": "text",
+    "tags": [
+      "1.05M Context",
+      "Flagship",
+      "50% OFF"
+    ],
+    "desc": "OpenAI's flagship model featuring extended test-time compute, 1,050,000-token context window, and native tool orchestration.",
+    "context": "1.05M",
+    "official_in": "$2.00",
+    "official_out": "$10.00",
+    "input_price": "$1.00",
+    "output_price": "$5.00",
+    "throughput": "120 t/s",
+    "latency": "125ms"
+  },
+  {
+    "id": "openai/gpt-6-sol",
+    "name": "GPT-6 Sol",
+    "author": "openai",
+    "author_display": "OpenAI",
+    "category": "text",
+    "tags": [
+      "1.05M Context",
+      "High-Speed",
+      "50% OFF"
+    ],
+    "desc": "Production tier for GPT-6 architecture offering a full 1,050,000-token context window, robust general reasoning, and OpenAI SDK drop-in compatibility.",
+    "context": "1.05M",
+    "official_in": "$2.00",
+    "official_out": "$10.00",
+    "input_price": "$1.00",
+    "output_price": "$5.00",
+    "throughput": "125 t/s",
+    "latency": "120ms"
+  },
+  {
+    "id": "openai/gpt-6-astra",
+    "name": "GPT-6 Astra",
+    "author": "openai",
+    "author_display": "OpenAI",
+    "category": "text",
+    "tags": [
+      "1.05M Context",
+      "Agentic",
+      "50% OFF"
+    ],
+    "desc": "Multi-agent orchestrator with 1,050,000-token context window fine-tuned for parallel tool execution, recursive task decomposition, and error-recovery loops.",
+    "context": "1.05M",
+    "official_in": "$10.00",
+    "official_out": "$50.00",
+    "input_price": "$5.00",
+    "output_price": "$25.00",
+    "throughput": "112 t/s",
+    "latency": "130ms"
+  },
+  {
+    "id": "openai/gpt-6-luna",
+    "name": "GPT-6 Luna",
+    "author": "openai",
+    "author_display": "OpenAI",
+    "category": "image",
+    "tags": [
+      "1.05M Context",
+      "Vision",
+      "50% OFF"
+    ],
+    "desc": "Multimodal generative intelligence model with 1,050,000 tokens context specializing in high-fidelity diagram generation, image editing instructions, and audio synthesis.",
+    "context": "1.05M",
+    "official_in": "$2.20",
+    "official_out": "$8.80",
+    "input_price": "$1.10",
+    "output_price": "$4.40",
+    "throughput": "118 t/s",
+    "latency": "135ms"
+  },
+  {
+    "id": "openai/gpt-6",
+    "name": "GPT-6",
+    "author": "openai",
+    "author_display": "OpenAI",
+    "category": "text",
+    "tags": [
+      "1.05M Context",
+      "Frontier",
+      "50% OFF"
+    ],
+    "desc": "OpenAI's foundational 6th-generation frontier intelligence engine with 1,050,000 tokens context window, generalized problem solving, and massive multilingual breadth.",
+    "context": "1.05M",
+    "official_in": "$4.00",
+    "official_out": "$16.00",
+    "input_price": "$2.00",
+    "output_price": "$8.00",
+    "throughput": "98 t/s",
+    "latency": "140ms"
+  },
+  {
+    "id": "openai/gpt-5-6",
+    "name": "GPT-5.6",
+    "author": "openai",
+    "author_display": "OpenAI",
+    "category": "text",
+    "tags": [
+      "1.05M Context",
+      "Stable",
+      "50% OFF"
+    ],
+    "desc": "Peak evolutionary checkpoint of the GPT-5 generation expanded with a full 1,050,000-token context window, optimized KV-cache reuse, and reduced hallucination.",
+    "context": "1.05M",
+    "official_in": "$2.00",
+    "official_out": "$12.00",
+    "input_price": "$1.00",
+    "output_price": "$6.00",
+    "throughput": "130 t/s",
+    "latency": "105ms"
+  },
+  {
+    "id": "openai/gpt-5-5",
+    "name": "GPT-5.5",
+    "author": "openai",
+    "author_display": "OpenAI",
+    "category": "text",
+    "tags": [
+      "1.05M Context",
+      "922k Input",
+      "50% OFF"
+    ],
+    "desc": "Frontier model designed for complex professional workloads featuring a 1M+ token context window (922K input, 128K output) with support for text and image inputs.",
+    "context": "1.05M",
+    "official_in": "$5.00",
+    "official_out": "$30.00",
+    "input_price": "$2.50",
+    "output_price": "$15.00",
+    "throughput": "128 t/s",
+    "latency": "110ms"
+  },
+  {
+    "id": "openai/gpt-5-4",
+    "name": "GPT-5.4",
+    "author": "openai",
+    "author_display": "OpenAI",
+    "category": "text",
+    "tags": [
+      "1.05M Context",
+      "922k Input",
+      "50% OFF"
+    ],
+    "desc": "Unifies the Codex and GPT lines into a single system featuring a 1M+ token context window (922K input, 128K output) for high-context coding and multimodal workflows.",
+    "context": "1.05M",
+    "official_in": "$2.20",
+    "official_out": "$8.80",
+    "input_price": "$1.10",
+    "output_price": "$4.40",
+    "throughput": "125 t/s",
+    "latency": "115ms"
+  },
+  {
+    "id": "openai/gpt-5-3-codex",
+    "name": "GPT-5.3 Codex",
+    "author": "openai",
+    "author_display": "OpenAI",
+    "category": "text",
+    "tags": [
+      "400K Context",
+      "Coding",
+      "50% OFF"
+    ],
+    "desc": "Specialized coding engine with 400,000 tokens context window and 128,000 output tokens tuned on trillions of syntax trees and test suites.",
+    "context": "400K",
+    "official_in": "$2.00",
+    "official_out": "$8.00",
+    "input_price": "$1.00",
+    "output_price": "$4.00",
+    "throughput": "135 t/s",
+    "latency": "100ms"
+  },
+  {
+    "id": "openai/gpt-5-2",
+    "name": "GPT-5.2",
+    "author": "openai",
+    "author_display": "OpenAI",
+    "category": "text",
+    "tags": [
+      "400K Context",
+      "Stable",
+      "50% OFF"
+    ],
+    "desc": "Stable release offering 400,000 tokens context window, 128,000 output tokens, and dependable instruction following across 80+ languages.",
+    "context": "400K",
+    "official_in": "$2.50",
+    "official_out": "$10.00",
+    "input_price": "$1.25",
+    "output_price": "$5.00",
+    "throughput": "120 t/s",
+    "latency": "120ms"
+  },
+  {
+    "id": "openai/gpt-5-1",
+    "name": "GPT-5.1",
+    "author": "openai",
+    "author_display": "OpenAI",
+    "category": "text",
+    "tags": [
+      "400K Context",
+      "5-Series",
+      "50% OFF"
+    ],
+    "desc": "400,000 tokens context window revision of GPT-5 with comprehensive general reasoning and OpenAI function calling API integration.",
+    "context": "400K",
+    "official_in": "$3.00",
+    "official_out": "$12.00",
+    "input_price": "$1.50",
+    "output_price": "$6.00",
+    "throughput": "115 t/s",
+    "latency": "125ms"
+  },
+  {
+    "id": "openai/gpt-5",
+    "name": "GPT-5",
+    "author": "openai",
+    "author_display": "OpenAI",
+    "category": "text",
+    "tags": [
+      "400K Context",
+      "Foundational",
+      "50% OFF"
+    ],
+    "desc": "OpenAI's foundational GPT-5 model supporting a 400,000-token context window with up to 128,000 output tokens and dynamic reasoning.",
+    "context": "400K",
+    "official_in": "$1.25",
+    "official_out": "$10.00",
+    "input_price": "$0.625",
+    "output_price": "$5.00",
+    "throughput": "110 t/s",
+    "latency": "130ms"
+  },
+  {
+    "id": "openai/o3",
+    "name": "o3",
+    "author": "openai",
+    "author_display": "OpenAI",
+    "category": "decisions",
+    "tags": [
+      "200K Context",
+      "100k Output",
+      "Reasoning",
+      "50% OFF"
+    ],
+    "desc": "OpenAI's benchmark-shattering reasoning model designed for Olympiad mathematics, competitive coding, and frontier science. Features a 200,000-token context window and up to 100,000 completion tokens.",
+    "context": "200K",
+    "official_in": "$2.00",
+    "official_out": "$8.00",
+    "input_price": "$1.00",
+    "output_price": "$4.00",
+    "throughput": "58 t/s",
+    "latency": "240ms"
+  },
+  {
+    "id": "openai/o4-mini",
+    "name": "o4-mini",
+    "author": "openai",
+    "author_display": "OpenAI",
+    "category": "decisions",
+    "tags": [
+      "128K Context",
+      "Reasoning",
+      "Fast",
+      "50% OFF"
+    ],
+    "desc": "Ultra-efficient reasoning model with optimized chain-of-thought calculation. 128,000 tokens context, fast, cost-effective, and highly capable at coding and math.",
+    "context": "128K",
+    "official_in": "$1.10",
+    "official_out": "$4.40",
+    "input_price": "$0.55",
+    "output_price": "$2.20",
+    "throughput": "145 t/s",
+    "latency": "95ms"
+  },
+  {
+    "id": "openai/gpt-6-instant",
+    "name": "GPT-6 Instant",
+    "author": "openai",
+    "author_display": "OpenAI",
+    "category": "text",
+    "tags": [
+      "128K Context",
+      "Sub-60ms",
+      "50% OFF"
+    ],
+    "desc": "Real-time edge model with 128,000 tokens context built for streaming chat widgets, voice-to-voice interfaces, and interactive autocomplete workflows.",
+    "context": "128K",
+    "official_in": "$0.60",
+    "official_out": "$2.40",
+    "input_price": "$0.30",
+    "output_price": "$1.20",
+    "throughput": "190 t/s",
+    "latency": "60ms"
+  }
+]
